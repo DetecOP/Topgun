@@ -46,8 +46,8 @@ gh auth login
 ## 5. Clone Repository
 
 ```bash
-gh repo clone DetecOP/team-project   # ดาวน์โหลดโปรเจกต์
-cd team-project                      # เข้าโฟลเดอร์โปรเจกต์
+gh repo clone DetecOP/Topgun   # ดาวน์โหลดโปรเจกต์
+cd Topgun                      # เข้าโฟลเดอร์โปรเจกต์
 git checkout develop                 # สลับไป Branch develop
 git pull origin develop              # ดึงงานล่าสุด
 ```
