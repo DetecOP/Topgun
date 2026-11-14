@@ -1,11 +1,11 @@
-# team-project
+# Topgun
 
 โปรเจกต์ที่ทีมใช้ทำงานร่วมกัน (แก้ย่อหน้านี้ให้บอกว่าโปรเจกต์ทำอะไร)
 
 ## Repository (ที่เก็บโค้ดบน GitHub)
 
 ```
-https://github.com/DetecOP/team-project
+https://github.com/DetecOP/Topgun
 ```
 
 
@@ -31,8 +31,8 @@ https://github.com/DetecOP/team-project
 ## Clone (ดาวน์โหลด) Repository
 
 ```bash
-gh repo clone DetecOP/team-project   # ดาวน์โหลดโปรเจกต์ลงเครื่อง
-cd team-project                      # เข้าไปในโฟลเดอร์โปรเจกต์
+gh repo clone DetecOP/Topgun   # ดาวน์โหลดโปรเจกต์ลงเครื่อง
+cd Topgun                      # เข้าไปในโฟลเดอร์โปรเจกต์
 git checkout develop                 # สลับไปที่ Branch develop
 ```
 
