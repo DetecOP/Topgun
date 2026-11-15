@@ -1,0 +1,7 @@
+requests
+pandas
+openpyxl
+gradio
+ollama
+paho-mqtt
+opencv-python
