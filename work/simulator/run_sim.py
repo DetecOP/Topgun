@@ -9,7 +9,7 @@
 import sys
 
 import config
-from agent_core import plan_offers, submit
+from agent_core import LotMemory, plan_offers, submit
 from market_sim import Market
 from pricer import BuyerPriceLearner
 from scoring import MODES, score_sold, score_unsold, total_score
@@ -42,6 +42,7 @@ def play(params, strategy, mode, seed, verbose=False):
     market = Market(params, seed)
     valuator = PlaceholderValuator(params)
     learner = make_learner(version, seed)
+    lot_memory = LotMemory(0 if version != "v2" else None, mode=mode)   # เพดานราคาต่อล็อต (v2 เท่านั้น)
     lot_scores, sold_rounds = [], []
 
     for r in range(1, market.n_rounds + 1):
@@ -52,11 +53,13 @@ def play(params, strategy, mode, seed, verbose=False):
             valuator.observe(lot)                              # เรียนผลวัดที่เพิ่งมาถึง
         rounds_left = market.n_rounds - r + 1                  # รวมรอบนี้
         offers = plan_offers(lots, market.public_buyers(), valuator, learner, mode, rounds_left,
-                             wait_for_data=wait, fixed_markup=fixed)
+                             wait_for_data=wait, fixed_markup=fixed, lot_memory=lot_memory)
         if verbose:
             print(f"\n--- รอบ {r} --- ล็อตเหลือ {len(lots)} (ยังไม่มีผลวัด {sum(l['moisture'] is None for l in lots)})")
             submit(offers)                                     # DRY_RUN: แค่พิมพ์
-        for res in market.resolve(offers):
+        results = market.resolve(offers)
+        lot_memory.update(results)
+        for res in results:
             o = res["offer"]
             if fixed is None:
                 learner.update(o["learn_key"], o["markup"], res["sold"])

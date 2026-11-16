@@ -67,11 +67,16 @@ class BuyerPriceLearner:
             v = best
         return v
 
-    def choose(self, buyer, value_per_kg, weight, mode, rounds_left):
-        """เลือกระดับราคา คืน (markup, คะแนนที่คาด, มูลค่าถ้ารอต่อ)"""
+    def choose(self, buyer, value_per_kg, weight, mode, rounds_left, max_markup=None):
+        """เลือกระดับราคา คืน (markup, คะแนนที่คาด, มูลค่าถ้ารอต่อ)
+        max_markup = เพดานของล็อตนี้ (ล็อตที่เพิ่งขายไม่ออก ห้ามเสนอแพงเท่าเดิม)"""
         wait_value = self._future_value(buyer, value_per_kg, weight, mode, rounds_left)
+        allowed = [i for i, m in enumerate(self.levels) if max_markup is None or m <= max_markup + 1e-9]
+        if not allowed:
+            allowed = [0]                                      # ต่ำกว่าทุกระดับ → ใช้ระดับต่ำสุด
         best = None
-        for i, m in enumerate(self.levels):
+        for i in allowed:
+            m = self.levels[i]
             a, b = self._ab(buyer, i)
             p = self.rng.betavariate(a, b) if self.explore else a / (a + b)   # โอกาสขายได้
             s = score_sold(mode, value_per_kg * (1 + m), value_per_kg, weight)
