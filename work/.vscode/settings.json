@@ -1,0 +1,17 @@
+{
+  // ใช้ Python ใน .venv ของโฟลเดอร์ work เป็นค่าเริ่มต้น
+  "python.defaultInterpreterPath": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+  // เปิด terminal ใหม่แล้วใช้ .venv อัตโนมัติ
+  "python.terminal.activateEnvironment": true,
+  // ให้ Python พิมพ์ภาษาไทยได้ใน terminal ของ VS Code
+  "terminal.integrated.env.windows": {
+    "PYTHONIOENCODING": "utf-8"
+  },
+  // ซ่อนโฟลเดอร์ที่ไม่ต้องแก้ จะได้ไม่รก
+  "files.exclude": {
+    "**/__pycache__": true
+  },
+  // บันทึกไฟล์อัตโนมัติเมื่อสลับหน้าต่าง กันลืมกด Save ตอนแข่ง
+  "files.autoSave": "onFocusChange",
+  "files.encoding": "utf8"
+}

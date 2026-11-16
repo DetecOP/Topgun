@@ -1,0 +1,28 @@
+{
+  // วิธีใช้: กด Ctrl+Shift+P → พิมพ์ "Run Task" → เลือกชื่อ task
+  "version": "2.0.0",
+  "options": {
+    "env": { "PYTHONIOENCODING": "utf-8" }
+  },
+  "tasks": [
+    {
+      "label": "เช็กเครื่อง",
+      "type": "process",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": ["${workspaceFolder}\\check_env.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "test", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "ทดสอบ API",
+      "type": "process",
+      "command": "${workspaceFolder}\\.venv\\Scripts\\python.exe",
+      "args": ["${workspaceFolder}\\api_test.py"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    }
+  ]
+}
