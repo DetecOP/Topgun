@@ -105,3 +105,30 @@ out/
 slprj/
 *.aliases
 *.lvlps
+
+# ============================================================
+# ML: datasets, weights, experiment outputs (เก็บบนเครื่องเทรน ไม่ขึ้น git)
+# ============================================================
+data/
+datasets/
+runs/
+wandb/
+mlruns/
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.tflite
+*.h5
+*.keras
+*.engine
+*.bin
+*.npz
+!**/sample_data/**
+
+# ============================================================
+# AI tools: ไฟล์ชั่วคราวของ Claude/Codex
+# ============================================================
+.codex_last.txt
+.claude/settings.local.json
