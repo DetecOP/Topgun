@@ -1,0 +1,38 @@
+{
+  "passed": true,
+  "synth_command": ".venv/bin/python day1/team_XX_day1/train.py --device cpu --quick --stage synth --pile-mode mixed --run v1check",
+  "test_command": ".venv/bin/python -m pytest day1/tests -q --junitxml=results/day1/v1check/pytest.xml",
+  "environment": {
+    "CUDA_VISIBLE_DEVICES": "",
+    "OMP_NUM_THREADS": "4",
+    "OPENBLAS_NUM_THREADS": "4"
+  },
+  "synth_exit_code": 0,
+  "pytest_exit_code": 0,
+  "tests": 34,
+  "failures": 0,
+  "errors": 0,
+  "background_report": "results/day1/background_check.json",
+  "pile_statistics": "results/day1/pile_stats_v1.json",
+  "pile_verification": "results/day1/pile_verification_v1.json",
+  "visual_review": {
+    "reviewed": true,
+    "sheets": [
+      "results/day1/v1check/train_contact_sheet.jpg",
+      "results/day1/v1check/val_contact_sheet.jpg"
+    ],
+    "observation": "Dense previews show connected clusters with partial overlap; sparse previews remain scattered."
+  },
+  "limitations": [
+    "No model trained in synth stage; dense-only metrics wiring tested with deterministic mocked predictions.",
+    "Python 3.9 checked by AST grammar and deferred-annotation/import regression, not by a Python 3.9 interpreter.",
+    "Fresh aarch64 dependency installation remains pending under D5."
+  ],
+  "pytest_warnings": [
+    "Unknown parent configuration asyncio_default_fixture_loop_scope",
+    "Unknown parent configuration asyncio_mode",
+    "Parent pytest cache is read-only"
+  ],
+  "gpu_work_started": false,
+  "commit_created": false
+}

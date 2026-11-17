@@ -1,0 +1,167 @@
+{
+  "passed": true,
+  "backgrounds_checked": 20,
+  "checks": [
+    {
+      "source_image": "circle_good.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "grid_good.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "square_good.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "circle_shell.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "grid_shell.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "square_shell.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "circle_black.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "grid_black.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "square_black.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "circle_husk.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "grid_husk.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "square_husk.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "circle_broken.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "grid_broken.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "square_broken.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "circle_parchment.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "grid_parchment.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "square_parchment.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "circle_immature.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    },
+    {
+      "source_image": "grid_immature.jpg",
+      "detected_beans": 0,
+      "jpeg_crop_detected_beans": {
+        "30": 0,
+        "95": 0
+      }
+    }
+  ],
+  "empty_segment_behavior": "ValueError: no bean foreground detected means zero beans"
+}

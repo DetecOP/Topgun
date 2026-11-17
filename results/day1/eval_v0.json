@@ -1,0 +1,1639 @@
+{
+ "summary": {
+  "val|bg0|iw0.0": 0.8238,
+  "val|bg0|iw0.25": 0.8048,
+  "val|bg0|iw0.5": 0.8048,
+  "val|bg0|iw0.75": 0.7619,
+  "val|bg0|iw1.0": 0.7571,
+  "val|bg240|iw0.0": 0.781,
+  "val|bg240|iw0.25": 0.7857,
+  "val|bg240|iw0.5": 0.7619,
+  "val|bg240|iw0.75": 0.7667,
+  "val|bg240|iw1.0": 0.7571,
+  "val_dense|bg0|iw0.0": 0.7381,
+  "val_dense|bg0|iw0.25": 0.7381,
+  "val_dense|bg0|iw0.5": 0.7333,
+  "val_dense|bg0|iw0.75": 0.7238,
+  "val_dense|bg0|iw1.0": 0.6857,
+  "val_dense|bg240|iw0.0": 0.6905,
+  "val_dense|bg240|iw0.25": 0.6905,
+  "val_dense|bg240|iw0.5": 0.7095,
+  "val_dense|bg240|iw0.75": 0.7,
+  "val_dense|bg240|iw1.0": 0.7048,
+  "arranged|bg0|iw0.0": 0.9524,
+  "arranged|bg0|iw0.25": 0.9524,
+  "arranged|bg0|iw0.5": 0.9524,
+  "arranged|bg0|iw0.75": 0.9524,
+  "arranged|bg0|iw1.0": 0.9524,
+  "arranged|bg240|iw0.0": 0.9524,
+  "arranged|bg240|iw0.25": 0.9524,
+  "arranged|bg240|iw0.5": 0.9524,
+  "arranged|bg240|iw0.75": 0.9524,
+  "arranged|bg240|iw1.0": 0.9524
+ },
+ "per_fold": {
+  "circle": {
+   "val|bg0|iw0.0": {
+    "correct": 60,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "shell->broken",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "immature->broken"
+    ]
+   },
+   "val|bg0|iw0.25": {
+    "correct": 57,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "shell->broken",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "immature->broken"
+    ]
+   },
+   "val|bg0|iw0.5": {
+    "correct": 58,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "shell->broken",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell"
+    ]
+   },
+   "val|bg0|iw0.75": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "shell->broken",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell"
+    ]
+   },
+   "val|bg0|iw1.0": {
+    "correct": 54,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "shell->broken",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell"
+    ]
+   },
+   "val|bg240|iw0.0": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "immature->good",
+     "immature->good",
+     "immature->good"
+    ]
+   },
+   "val|bg240|iw0.25": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "immature->good",
+     "immature->good"
+    ]
+   },
+   "val|bg240|iw0.5": {
+    "correct": 54,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "immature->good",
+     "immature->good"
+    ]
+   },
+   "val|bg240|iw0.75": {
+    "correct": 53,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "immature->good",
+     "immature->good"
+    ]
+   },
+   "val|bg240|iw1.0": {
+    "correct": 52,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "immature->good",
+     "immature->good"
+    ]
+   },
+   "val_dense|bg0|iw0.0": {
+    "correct": 54,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature",
+     "immature->good"
+    ]
+   },
+   "val_dense|bg0|iw0.25": {
+    "correct": 54,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg0|iw0.5": {
+    "correct": 53,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg0|iw0.75": {
+    "correct": 50,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "shell->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg0|iw1.0": {
+    "correct": 47,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "good->immature",
+     "good->immature",
+     "good->shell",
+     "good->broken",
+     "good->immature",
+     "good->immature",
+     "shell->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell"
+    ]
+   },
+   "val_dense|bg240|iw0.0": {
+    "correct": 47,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "good->immature",
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature",
+     "immature->good",
+     "immature->good"
+    ]
+   },
+   "val_dense|bg240|iw0.25": {
+    "correct": 47,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature",
+     "immature->good",
+     "immature->good"
+    ]
+   },
+   "val_dense|bg240|iw0.5": {
+    "correct": 48,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature",
+     "immature->good"
+    ]
+   },
+   "val_dense|bg240|iw0.75": {
+    "correct": 46,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature",
+     "immature->good"
+    ]
+   },
+   "val_dense|bg240|iw1.0": {
+    "correct": 44,
+    "n": 70,
+    "errors": [
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "good->shell",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature",
+     "immature->good"
+    ]
+   },
+   "arranged|bg0|iw0.0": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg0|iw0.25": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg0|iw0.5": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg0|iw0.75": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg0|iw1.0": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw0.0": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw0.25": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw0.5": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw0.75": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw1.0": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   }
+  },
+  "grid": {
+   "val|bg0|iw0.0": {
+    "correct": 57,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "shell->good",
+     "shell->broken",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->good",
+     "immature->parchment"
+    ]
+   },
+   "val|bg0|iw0.25": {
+    "correct": 57,
+    "n": 70,
+    "errors": [
+     "shell->good",
+     "shell->broken",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->good",
+     "immature->parchment"
+    ]
+   },
+   "val|bg0|iw0.5": {
+    "correct": 56,
+    "n": 70,
+    "errors": [
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val|bg0|iw0.75": {
+    "correct": 50,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val|bg0|iw1.0": {
+    "correct": 50,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val|bg240|iw0.0": {
+    "correct": 53,
+    "n": 70,
+    "errors": [
+     "shell->immature",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->good",
+     "immature->good",
+     "immature->parchment"
+    ]
+   },
+   "val|bg240|iw0.25": {
+    "correct": 52,
+    "n": 70,
+    "errors": [
+     "shell->immature",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->good",
+     "immature->parchment"
+    ]
+   },
+   "val|bg240|iw0.5": {
+    "correct": 50,
+    "n": 70,
+    "errors": [
+     "shell->immature",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val|bg240|iw0.75": {
+    "correct": 51,
+    "n": 70,
+    "errors": [
+     "shell->immature",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val|bg240|iw1.0": {
+    "correct": 51,
+    "n": 70,
+    "errors": [
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg0|iw0.0": {
+    "correct": 51,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->shell",
+     "shell->broken",
+     "shell->broken",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->shell",
+     "broken->immature",
+     "broken->good",
+     "broken->husk",
+     "broken->immature",
+     "broken->husk",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg0|iw0.25": {
+    "correct": 51,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->shell",
+     "shell->broken",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->shell",
+     "broken->immature",
+     "broken->good",
+     "broken->husk",
+     "broken->immature",
+     "broken->husk",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg0|iw0.5": {
+    "correct": 50,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->shell",
+     "shell->broken",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->shell",
+     "broken->immature",
+     "broken->good",
+     "broken->husk",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg0|iw0.75": {
+    "correct": 49,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->shell",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->husk",
+     "broken->shell",
+     "broken->good",
+     "broken->good",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg0|iw1.0": {
+    "correct": 45,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->shell",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->husk",
+     "broken->immature",
+     "broken->immature",
+     "broken->shell",
+     "broken->good",
+     "broken->good",
+     "broken->immature",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg240|iw0.0": {
+    "correct": 46,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "shell->good",
+     "shell->broken",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "husk->black",
+     "broken->shell",
+     "broken->immature",
+     "broken->shell",
+     "broken->immature",
+     "broken->shell",
+     "broken->parchment",
+     "broken->immature",
+     "broken->shell",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg240|iw0.25": {
+    "correct": 45,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "shell->good",
+     "shell->broken",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "husk->black",
+     "broken->shell",
+     "broken->immature",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->parchment",
+     "broken->immature",
+     "broken->shell",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg240|iw0.5": {
+    "correct": 46,
+    "n": 70,
+    "errors": [
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->shell",
+     "broken->immature",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->husk",
+     "broken->immature",
+     "broken->shell",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg240|iw0.75": {
+    "correct": 45,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "shell->good",
+     "shell->good",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "husk->black",
+     "broken->shell",
+     "broken->immature",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->husk",
+     "broken->immature",
+     "broken->shell",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "val_dense|bg240|iw1.0": {
+    "correct": 49,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "shell->good",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->husk",
+     "broken->immature",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "broken->husk",
+     "broken->immature",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment",
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg0|iw0.0": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg0|iw0.25": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg0|iw0.5": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg0|iw0.75": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg0|iw1.0": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg240|iw0.0": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg240|iw0.25": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg240|iw0.5": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg240|iw0.75": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   },
+   "arranged|bg240|iw1.0": {
+    "correct": 6,
+    "n": 7,
+    "errors": [
+     "immature->parchment"
+    ]
+   }
+  },
+  "square": {
+   "val|bg0|iw0.0": {
+    "correct": 56,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val|bg0|iw0.25": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val|bg0|iw0.5": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val|bg0|iw0.75": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val|bg0|iw1.0": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val|bg240|iw0.0": {
+    "correct": 56,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "immature->good"
+    ]
+   },
+   "val|bg240|iw0.25": {
+    "correct": 58,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val|bg240|iw0.5": {
+    "correct": 56,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val|bg240|iw0.75": {
+    "correct": 57,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val|bg240|iw1.0": {
+    "correct": 56,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg0|iw0.0": {
+    "correct": 50,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg0|iw0.25": {
+    "correct": 50,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg0|iw0.5": {
+    "correct": 51,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg0|iw0.75": {
+    "correct": 53,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg0|iw1.0": {
+    "correct": 52,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "good->immature",
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg240|iw0.0": {
+    "correct": 52,
+    "n": 70,
+    "errors": [
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->shell",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg240|iw0.25": {
+    "correct": 53,
+    "n": 70,
+    "errors": [
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->good",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg240|iw0.5": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg240|iw0.75": {
+    "correct": 56,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->good",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "val_dense|bg240|iw1.0": {
+    "correct": 55,
+    "n": 70,
+    "errors": [
+     "good->immature",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "black->husk",
+     "broken->good",
+     "broken->shell",
+     "parchment->immature",
+     "parchment->immature",
+     "parchment->immature"
+    ]
+   },
+   "arranged|bg0|iw0.0": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg0|iw0.25": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg0|iw0.5": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg0|iw0.75": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg0|iw1.0": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw0.0": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw0.25": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw0.5": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw0.75": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   },
+   "arranged|bg240|iw1.0": {
+    "correct": 7,
+    "n": 7,
+    "errors": []
+   }
+  }
+ }
+}

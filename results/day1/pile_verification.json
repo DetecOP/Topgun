@@ -1,0 +1,19 @@
+{
+  "passed": true,
+  "samples": 14,
+  "classes": [
+    "black",
+    "broken",
+    "good",
+    "husk",
+    "immature",
+    "parchment",
+    "shell"
+  ],
+  "max_dimension": 768,
+  "annotations": 263,
+  "rle_roundtrip": true,
+  "source_disjoint": true,
+  "coco_root": "/home/control1241/Documents/Codex/2026-11-14/ro/outputs/sensor-mcp/Topgun-day1/data/day1/piles/v0/preview",
+  "sample_dir": "/home/control1241/Documents/Codex/2026-11-14/ro/outputs/sensor-mcp/Topgun-day1/results/day1/pile_samples"
+}
