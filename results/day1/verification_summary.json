@@ -1,0 +1,34 @@
+{
+  "D1": {
+    "passed": true,
+    "evidence": "segment_counts.csv"
+  },
+  "D2": {
+    "passed": true,
+    "evidence": "pile_verification.json"
+  },
+  "D3": {
+    "passed": true,
+    "smoke_only": true,
+    "evidence": "quick/metrics.json"
+  },
+  "D4": {
+    "passed": true,
+    "evidence": "pytest.xml",
+    "tests": 25,
+    "failures": 0,
+    "errors": 0
+  },
+  "D5": {
+    "passed": false,
+    "status": "pending Claude Pi verification",
+    "reason": "No network/package installation or Pi in sandbox; requirements need Python >=3.12 and aarch64 wheel validation."
+  },
+  "quick_cli": {
+    "passed": true,
+    "images": 21,
+    "copied_bytes_identical": true,
+    "evidence": "quick/infer_outputs/predictions.csv"
+  },
+  "gpu_command": ".venv/bin/python day1/team_XX_day1/train.py --device cuda --run cv --backbones mobilenetv3_large_100 efficientnet_b0 mobilenetv3_small_100 --head-epochs 5 --finetune-epochs 30 --train-piles-per-class 20 --val-piles-per-class 10 --batch-size 32"
+}

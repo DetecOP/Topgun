@@ -132,3 +132,12 @@ mlruns/
 # ============================================================
 .codex_last.txt
 .claude/settings.local.json
+
+# ============================================================
+# Day 1 work artefacts (Claude/Codex)
+# ============================================================
+.codex_last*.txt
+.venv
+*.bak_*
+results/**/infer_outputs/
+results/day1/quick/

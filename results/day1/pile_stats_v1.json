@@ -1,0 +1,182 @@
+{
+  "passed": true,
+  "requested_mode": "mixed",
+  "seed": 2026,
+  "split_counts": {
+    "train": {
+      "dense": 5,
+      "medium": 1,
+      "sparse": 1
+    },
+    "val": {
+      "dense": 5,
+      "medium": 1,
+      "sparse": 1
+    }
+  },
+  "piles": [
+    {
+      "split": "train",
+      "filename": "good_0000.jpg",
+      "mode": "dense",
+      "beans": 28,
+      "touching_beans": 28,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8501914927247096,
+      "min_visible_fraction": 0.6061946902654868,
+      "max_new_overlap_fraction": 0.36560364464692485
+    },
+    {
+      "split": "train",
+      "filename": "shell_0000.jpg",
+      "mode": "dense",
+      "beans": 25,
+      "touching_beans": 25,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8800949636552438,
+      "min_visible_fraction": 0.6163434903047091,
+      "max_new_overlap_fraction": 0.3881527669524552
+    },
+    {
+      "split": "train",
+      "filename": "black_0000.jpg",
+      "mode": "medium",
+      "beans": 11,
+      "touching_beans": 7,
+      "touching_fraction": 0.6363636363636364,
+      "mean_visible_fraction": 0.9267479634093266,
+      "min_visible_fraction": 0.6505415162454874,
+      "max_new_overlap_fraction": 0.38689048760991207
+    },
+    {
+      "split": "train",
+      "filename": "husk_0000.jpg",
+      "mode": "dense",
+      "beans": 23,
+      "touching_beans": 23,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8476732526903095,
+      "min_visible_fraction": 0.6196868008948546,
+      "max_new_overlap_fraction": 0.38885941644562333
+    },
+    {
+      "split": "train",
+      "filename": "broken_0000.jpg",
+      "mode": "sparse",
+      "beans": 17,
+      "touching_beans": 7,
+      "touching_fraction": 0.4117647058823529,
+      "mean_visible_fraction": 0.9743291438267656,
+      "min_visible_fraction": 0.7338308457711443,
+      "max_new_overlap_fraction": 0.24746743849493488
+    },
+    {
+      "split": "train",
+      "filename": "parchment_0000.jpg",
+      "mode": "dense",
+      "beans": 16,
+      "touching_beans": 16,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.9269342008529136,
+      "min_visible_fraction": 0.7102157102157102,
+      "max_new_overlap_fraction": 0.2560483870967742
+    },
+    {
+      "split": "train",
+      "filename": "immature_0000.jpg",
+      "mode": "dense",
+      "beans": 27,
+      "touching_beans": 27,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8454898246429722,
+      "min_visible_fraction": 0.6047323506594259,
+      "max_new_overlap_fraction": 0.3891213389121339
+    },
+    {
+      "split": "val",
+      "filename": "good_0000.jpg",
+      "mode": "sparse",
+      "beans": 20,
+      "touching_beans": 9,
+      "touching_fraction": 0.45,
+      "mean_visible_fraction": 0.9727194135091632,
+      "min_visible_fraction": 0.827217125382263,
+      "max_new_overlap_fraction": 0.27997275204359673
+    },
+    {
+      "split": "val",
+      "filename": "shell_0000.jpg",
+      "mode": "dense",
+      "beans": 30,
+      "touching_beans": 30,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8651199376734986,
+      "min_visible_fraction": 0.6115166261151662,
+      "max_new_overlap_fraction": 0.3678571428571429
+    },
+    {
+      "split": "val",
+      "filename": "black_0000.jpg",
+      "mode": "medium",
+      "beans": 12,
+      "touching_beans": 6,
+      "touching_fraction": 0.5,
+      "mean_visible_fraction": 0.9408710129803235,
+      "min_visible_fraction": 0.6141649048625792,
+      "max_new_overlap_fraction": 0.33755274261603374
+    },
+    {
+      "split": "val",
+      "filename": "husk_0000.jpg",
+      "mode": "dense",
+      "beans": 31,
+      "touching_beans": 31,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8698376811577218,
+      "min_visible_fraction": 0.6317235963879073,
+      "max_new_overlap_fraction": 0.3319838056680162
+    },
+    {
+      "split": "val",
+      "filename": "broken_0000.jpg",
+      "mode": "dense",
+      "beans": 14,
+      "touching_beans": 14,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8813374903042271,
+      "min_visible_fraction": 0.6217331499312242,
+      "max_new_overlap_fraction": 0.3614457831325301
+    },
+    {
+      "split": "val",
+      "filename": "parchment_0000.jpg",
+      "mode": "dense",
+      "beans": 19,
+      "touching_beans": 19,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8832653929667378,
+      "min_visible_fraction": 0.6101694915254238,
+      "max_new_overlap_fraction": 0.3529676258992806
+    },
+    {
+      "split": "val",
+      "filename": "immature_0000.jpg",
+      "mode": "dense",
+      "beans": 26,
+      "touching_beans": 26,
+      "touching_fraction": 1.0,
+      "mean_visible_fraction": 0.8763027206085925,
+      "min_visible_fraction": 0.6573751451800233,
+      "max_new_overlap_fraction": 0.3971119133574007
+    }
+  ],
+  "contact_definition": "amodal mask overlap or 8-neighbour pixel contact at placement; symmetric instance IDs in COCO",
+  "dense": {
+    "piles": 10,
+    "beans": 239,
+    "touching_fraction": 1.0,
+    "mean_visible_fraction": 0.8693999895025183,
+    "target_touching_fraction": 0.7
+  },
+  "dense_only_validation_accuracy": "not evaluated by synth stage; training writes synthetic_dense metrics"
+}

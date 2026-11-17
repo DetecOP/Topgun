@@ -1,0 +1,7 @@
+# Inference only. Target: judges' Raspberry Pi 4, Raspberry Pi OS 32-bit (armhf), Python 3.13.5.
+# onnxruntime is NOT listed: it has no wheel for 32-bit ARM. infer.py runs the ONNX model with OpenCV DNN.
+# piwheels hosts prebuilt armv7l wheels of exactly these versions for Python 3.13 (Raspberry Pi OS).
+--extra-index-url https://www.piwheels.org/simple
+numpy==2.5.4
+pillow==13.0.0
+opencv-python-headless==5.0.0.93
