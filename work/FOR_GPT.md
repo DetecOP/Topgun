@@ -1,4 +1,6 @@
-# อ่านก่อน (สำหรับ AI ผู้ช่วย) · TESA Top Gun Rally 2026 Track 3 · ทีม ModEngi (T13)
+# อ่านก่อน (สำหรับ AI ผู้ช่วย)
+
+> สารบัญวันที่ 20: `work/day20/README.md` · TESA Top Gun Rally 2026 Track 3 · ทีม ModEngi (T13)
 
 ## งานคืออะไร
 agent Python ขายกาแฟในตลาดประมูลผ่าน API (ผู้ซื้อ 3 แบบ: Specialty · Commercial · Instant) แข่งกับ 56 ทีม
@@ -19,11 +21,11 @@ agent Python ขายกาแฟในตลาดประมูลผ่า�
 | 1 | `work/day20/DAY3.md` | แผนด่าน 3 · กลยุทธ์ · เช็กลิสต์ · ตารางตัดสินใจระหว่างแข่ง · คำถามค้าง |
 | 2 | `work/day18/DAY2_REPORT_PM.md` | สรุปด่าน 2 ทั้งวัน · บทเรียน |
 | 3 | `work/day18/KNOWLEDGE.md` | กติกา API · นิสัยผู้ซื้อ · noise ของตัวอย่าง |
-| 4 | `work/day18/agent/RUN.md` | วิธีรัน + ค่าตั้งทุกตัวพร้อมผลทดสอบ |
-| 5 | `work/day20/overnight/NIGHT_LOG.md` | ผลจูนกลางคืน 18→19 พ.ย. |
-| 6 | `work/day18/agent/คู่มือ-API.md` | API ตลาด |
+| 4 | `work/day20/agent/RUN.md` | วิธีรัน + ค่าตั้งทุกตัวพร้อมผลทดสอบ |
+| 5 | `work/day20/results/NIGHT_LOG.md` | ผลจูนกลางคืน 18→19 พ.ย. |
+| 6 | `work/day20/agent/คู่มือ-API.md` | API ตลาด |
 
-## โค้ด (`work/day18/agent/`)
+## โค้ด (`work/day20/agent/` · ชุดแข่งวันที่ 20 · `work/day18/agent/` = รุ่นด่าน 2 เก็บไว้เป็นประวัติ)
 - `main.py` ลูปหลัก · `market.py` เรียก API · `appraisal.py` ประเมินมูลค่า (hybrid Bayes) · `market_model.py` ราคาตัดจาก market_summary
 - `strategy.py` เลือกล็อต/ผู้ซื้อ/ราคา · `playbook.py` ช่วงเกม/ปฏิทิน · `mock_market.py` ตลาดจำลอง · `test_agent.py` ทดสอบ 49 ข้อ
 - ไม่มี `.env` / key ใน repo (ตั้งใจ)

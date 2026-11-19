@@ -4,8 +4,10 @@ import strategy, mock_market as mm
 from inventory import spec_ok
 class Mem:
     def __init__(s, sent, rounds): s.sent, s.rounds = sent, rounds
-ev=[json.loads(l) for l in open("logs/decisions.jsonl",encoding="utf-8")]
+ev=[json.loads(l) for l in open(__import__("os").environ.get("STAGE2_LOG", str(__import__("pathlib").Path(__file__).resolve().parents[1] / "data" / "stage2_competition" / "decisions.jsonl")), encoding="utf-8")]
 ng=[e for e in ev if e["event"]=="new_game"][0]; samples=ng["samples"]
+import os as _o
+if _o.environ.get("WHATIF_LOT3_M"): samples["LOT-T13-3"]=dict(samples["LOT-T13-3"], moisture_pct=float(_o.environ["WHATIF_LOT3_M"]))
 tv=next(e["tv"] for e in ev if e["event"]=="appraisal_sent")
 rules=dict(mm.RULES); rules["timeline"]=dict(rules["timeline"], **ng["timeline"])
 opens={}; results={}; order=[]

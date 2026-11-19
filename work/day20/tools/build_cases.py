@@ -2,7 +2,7 @@
 จุดตัดสินใจ = (รอบ R1–R8, ประเภท C/I/S) · ข้อมูลเข้า = ข้อเท็จจริงที่ Python ตีความแล้ว (รูปแบบ B) ณ เปิดรอบ
 ป้ายเฉลยมองย้อน = replay ด่าน 2 (ซองตรวจสเปก = ตก) ใช้ค่าตั้งของป้ายนั้นเฉพาะรอบนั้น → ป้ายที่ PR สูงสุด · ต่างจาก normal < 0.001 = normal
 P1 ไม่มีในชุด (replay ไม่ตัดสินใจรอบซ้อม) · เทียบป้ายของ rule_advisor ไว้ด้วย
-รันในโฟลเดอร์ work/day18/agent: python ../../day20/overnight/build_cases.py"""
+รันในโฟลเดอร์ work/day20/agent: python ../tools/build_cases.py"""
 import json
 import os
 import subprocess
@@ -37,7 +37,7 @@ class Mem:
         self.sent, self.rounds = sent, rounds
 
 
-ev = [json.loads(x) for x in open("logs/decisions.jsonl", encoding="utf-8")]
+ev = [json.loads(x) for x in open(__import__("os").environ.get("STAGE2_LOG", str(__import__("pathlib").Path(__file__).resolve().parents[1] / "data" / "stage2_competition" / "decisions.jsonl")), encoding="utf-8")]
 ng = [e for e in ev if e["event"] == "new_game"][0]
 samples = ng["samples"]
 opens, results, sent, order = {}, {}, {}, []

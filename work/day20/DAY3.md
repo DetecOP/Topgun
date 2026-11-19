@@ -1,5 +1,7 @@
 # วันที่ 3 · ด่าน 3 แข่งจริง (20 พ.ย. 2026) · ทีม ModEngi (T13)
 
+> **ทุกอย่างของวันที่ 20 อยู่ใน `work/day20/`** · รัน agent จาก `work/day20/agent` · ดูสารบัญที่ `work/day20/README.md`
+
 แผนและเช็กลิสต์ · ที่มา: `slides/สไลด์วันที่-20.pdf` (repo ผู้จัด khthana/Coffee-TESA-starter) + บทเรียนด่าน 2 (`work/day18/DAY2_REPORT_PM.md`)
 
 ---
@@ -26,7 +28,7 @@
 - คะแนนรวม 15% · 35% · **50%** (ด่าน 1 · 2 · 3) · เสมอดูด่าน 3 → 2 → 1
 - กติกาเหมือนด่าน 2: ใช้กฎ Python ล้วน (ไม่ใช้ LLM) ได้ · ห้ามส่ง/แก้/ยกเลิกซองด้วยมือ · LLM ได้เฉพาะ gateway ผู้จัด · ตลาด ≤ 5 คำขอ/วินาที
 
-## 3. กลยุทธ์ (โค้ดรุ่น `market3` ใน `work/day18/agent/`)
+## 3. กลยุทธ์ (โค้ดรุ่น `market3` ใน `work/day20/agent/`)
 
 "ขายเร็ว ขายหมด ราคาตามตลาดแข่ง" · ใช้ผลตลาดแข่งเท่านั้น (ตลาดฝึกใช้แค่เพดานผู้ซื้อ)
 
@@ -44,7 +46,7 @@
 **ผลทดสอบ:** replay log ตลาดแข่งด่าน 2 → PR ~0.964 (ที่ใช้จริง ~0.931 · ทีมอันดับ 1 ≥ 0.976) · ตลาดจำลองแบบด่าน 3 → PR ~0.948 ขาย ~98%
 **เทศกาล:** ทดสอบเก็บล็อต Specialty รอเทศกาลแล้ว ไม่ต่างจากไม่เก็บ → ค่าเริ่มไม่เก็บ (เปิดได้ด้วย `FESTIVAL_HOLD`)
 
-## 4. คำสั่ง (Terminal ใหม่ ในโฟลเดอร์ `work/day18/agent`)
+## 4. คำสั่ง (Terminal ใหม่ ในโฟลเดอร์ `work/day20/agent`)
 
 ก่อนวันแข่ง: แก้ `.env.competition` ให้ `MARKET_URL` / `TEAM_KEY` / `LLM_BASE_URL` เป็นของด่าน 3 (**ยังไม่ทราบ** · ถามผู้จัด)
 
@@ -60,7 +62,7 @@ $env:PYTHONIOENCODING="utf-8"; $env:AGENT_ENV=".env.competition"; $env:USE_LLM="
 ## 5. เช็กลิสต์ก่อน 09:30
 
 - [ ] `.env.competition`: MARKET_URL ตลาดแข่ง + key แข่ง · LLM_BASE_URL ชี้ gateway ผู้จัดเท่านั้น
-- [ ] ย้าย `agent/logs/` เก่าออก (เก็บสำรอง) · สร้าง `logs/` ใหม่ + คัดลอก `learned.json`
+- [x] `work/day20/agent/logs/` ใหม่แล้ว (มีแค่ `learned.json` · log ด่าน 2 อยู่ที่ `work/day20/data/stage2_competition/`) · ตรวจว่ายังว่างก่อนรัน
 - [ ] `python test_agent.py` ผ่านทั้งหมด
 - [ ] อ่านตลาดได้ (GET อย่างเดียว เช่น `ดูตลาด.ipynb` ช่อง 1)
 - [ ] ลอง `python pack.py` (ยังไม่ `--send`) ได้ zip < 20 MB · ไม่มี `.env`
@@ -106,7 +108,7 @@ $env:PYTHONIOENCODING="utf-8"; $env:AGENT_ENV=".env.competition"; $env:USE_LLM="
 - ห้ามส่ง/แก้/ยกเลิกซองหรือผลประเมินด้วยมือเหมือนเดิม
 - ก่อน 09:30: ส่ง B บรรทัดแรกของ agent + `new_game` (ล็อต · ตัวอย่าง · ปฏิทิน)
 
-ค่าตั้งทั้งหมดและความหมาย: `work/day18/agent/RUN.md`
+ค่าตั้งทั้งหมดและความหมาย: `work/day20/agent/RUN.md`
 
 ## 7. หลังตลาดปิด
 
@@ -134,7 +136,7 @@ $env:PYTHONIOENCODING="utf-8"; $env:AGENT_ENV=".env.competition"; $env:USE_LLM="
 **ก่อน 09:30**
 1. ผู้ใช้: ขอ URL ตลาด + TEAM_KEY ด่าน 3 · ถามสูตร "PR รายรอบ" (รอบที่ไม่มีของขายนับอย่างไร) และ "TV ที่ถูกประเมิน" (TV จริงหรือที่เราส่ง) · **ยังไม่ทราบ**
 2. ผู้ใช้: กรอก MARKET_URL / TEAM_KEY ใน `.env.competition` (LLM :4000 ตั้งแล้ว)
-3. ย้าย `agent/logs/` ด่าน 2 ออก · สร้าง `logs/` ใหม่ + คัดลอก `learned.json`
+3. `work/day20/agent/logs/` เตรียมแล้ว (มีแค่ learned.json) · ถ้ามี decisions.jsonl จากการลองรัน ให้ย้ายออกก่อน
 4. `python test_agent.py` (72/72) · อ่านตลาด GET (`ดูตลาด.ipynb`) · `llm_ping.py` 1 ครั้ง (ไม่ผ่าน → `LLM_LABEL=off`) · `python pack.py` (ไม่ --send)
 5. ไม่มี agent ค้าง · โน้ตบุ๊กเสียบสาย / Sleep = Never / แอป Claude เปิดค้าง · คนอธิบายกลยุทธ์ 1 คน
 6. ถ้าผู้จัดตอบว่ารอบที่ไม่มีของขายนับ PR = 0 → แจ้ง A ปรับให้กระจายขายถึงรอบท้าย (ต้องตัดสินก่อน R1)

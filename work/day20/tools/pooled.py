@@ -1,5 +1,5 @@
 import json,statistics as st,math,collections
-rows=[json.loads(l) for l in open("tune_results.jsonl",encoding="utf-8")]
+rows=[json.loads(l) for l in open(__import__("os").path.join(__import__("os").path.dirname(__import__("os").path.abspath(__file__)), "..", "results", "tune_results.jsonl"),encoding="utf-8")]
 agg=collections.defaultdict(lambda:{"s3":[],"r8":[],"rp":[]})
 for r in rows:
     if r["kind"]!="cand": continue

@@ -1,6 +1,6 @@
 """ชุดทดสอบพฤติกรรม LLM ผู้จัด (สเปก B llm_behavior_test.md G3: T1 รูปแบบ · T2 เข้าใจสัญญาณ · T3 จำแนก + ผิดทิศ · T6 เวลา)
 ใช้ gateway ช่วงฝึก (LLM_BASE_URL จาก .env ของ starter) · ไม่แตะตลาด · ≤ 19 คำขอ/นาที · ทีละคำขอ
-python ../../day20/llm_eval/run_tests.py v1   (รันในโฟลเดอร์ work/day18/agent)"""
+python ../llm_eval/run_tests.py v1   (รันในโฟลเดอร์ work/day20/agent)"""
 import json
 import os
 import statistics as st

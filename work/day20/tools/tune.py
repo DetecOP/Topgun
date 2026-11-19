@@ -20,7 +20,7 @@ from datetime import datetime
 from pathlib import Path
 
 HERE = Path(__file__).parent
-AGENT = HERE.parent.parent / "day18" / "agent"
+AGENT = HERE.parent / "agent"
 PY = sys.executable
 SCRATCH_REPLAY = Path(os.environ.get("REPLAY_PY", ""))
 N_SEEDS = int(os.environ.get("TUNE_SEEDS", "60"))
@@ -89,7 +89,7 @@ def paired(a: list[float], b: list[float]) -> tuple[float, float]:
 
 
 def log(row: dict) -> None:
-    with open(HERE / "tune_results.jsonl", "a", encoding="utf-8") as f:
+    with open(HERE.parent / "results" / "tune_results.jsonl", "a", encoding="utf-8") as f:
         f.write(json.dumps(row, ensure_ascii=False) + "\n")
 
 
@@ -97,11 +97,11 @@ def summary(best: dict, history: list[str]) -> None:
     lines = [f"# จูนตลาดจำลองทั้งคืน · อัปเดต {datetime.now():%H:%M}", "",
              f"ชุดดีสุดตอนนี้ (เทียบค่าเริ่มของโค้ด): `{json.dumps(best, ensure_ascii=False)}`", "",
              "| รอบ | ค่าที่ลอง | S3 ต่าง (±SE) | R8 ต่าง (±SE) | replay | ผล |", "|---|---|---|---|---|---|"] + history[-80:]
-    (HERE / "tune_summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+    (HERE.parent / "results" / "tune_summary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
 def main():
-    best_path = HERE / "best_env.json"
+    best_path = HERE.parent / "results" / "best_env.json"
     best = json.loads(best_path.read_text(encoding="utf-8")) if best_path.exists() else {}
     history = []
     it = int(os.environ.get("TUNE_START_ITER", "1"))

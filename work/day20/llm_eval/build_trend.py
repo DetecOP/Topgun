@@ -2,7 +2,7 @@
 ต่อ (ผู้ซื้อ, รอบ t): ประวัติราคาตัดทุกรอบก่อนหน้า (รวม P1) · เฉลย = ราคาตัดรอบ t+1 ของผู้ซื้อรายเดียวกัน
 ราคาตัดต่อใบ = price_max ÷ TV สูงสุดของล็อตที่ผ่านสเปกใบนั้น (ขอบล่าง เหมือน market_model) · ต่อรอบ = ต่ำสุด/มัธยฐาน/สูงสุด
 baseline: (a) คงที่ = มัธยฐานรอบล่าสุด (b) ตามแนวโน้ม = ล่าสุด + ความชันเฉลี่ย 2 รอบ (c) market_model vol = min(ล่าสุด, เฉลี่ย) − 1.5×sd
-รันในโฟลเดอร์ work/day18/agent"""
+รันในโฟลเดอร์ work/day20/agent"""
 import json
 import os
 import statistics as st
@@ -13,7 +13,7 @@ sys.path.insert(0, os.getcwd())
 from inventory import spec_ok  # noqa: E402
 
 HERE = Path(__file__).parent
-ev = [json.loads(x) for x in open("logs/decisions.jsonl", encoding="utf-8")]
+ev = [json.loads(x) for x in open(__import__("os").environ.get("STAGE2_LOG", str(__import__("pathlib").Path(__file__).resolve().parents[1] / "data" / "stage2_competition" / "decisions.jsonl")), encoding="utf-8")]
 ng = [e for e in ev if e["event"] == "new_game"][0]
 samples = ng["samples"]
 tv = next(e["tv"] for e in ev if e["event"] == "appraisal_sent")

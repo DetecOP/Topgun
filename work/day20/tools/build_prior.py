@@ -18,13 +18,13 @@ from datetime import datetime
 from pathlib import Path
 
 HERE = Path(__file__).parent
-AGENT = HERE.parent.parent / "day18" / "agent"
+AGENT = HERE.parent / "agent"
 sys.path.insert(0, str(AGENT))
 import appraisal  # noqa: E402
 
-RULES = json.loads((HERE / "sandbox_rules.json").read_text(encoding="utf-8"))
-OLD_LOGS = [HERE.parent.parent / "day18" / "logs_backup_20261118_pre_competition" / "logs"]
-NEW_LOGS = [HERE / "sandbox_agent" / "logs"]
+RULES = json.loads((HERE.parent / "data" / "sandbox_rules.json").read_text(encoding="utf-8"))
+OLD_LOGS = [HERE.parent / "data" / "sandbox_pre_competition" / "logs"]
+NEW_LOGS = [HERE.parent / "data" / "sandbox_agent" / "logs"]
 STEP = 0.05
 
 
@@ -121,14 +121,14 @@ def main():
     print(line_a)
     print(line_n)
     full = build(allg, f"ตลาดฝึก reveal {len(allg)} เกม (เก่า {len(old_g)} + คืนนี้ {len(new_g)}) · สร้าง {datetime.now():%Y-%m-%d %H:%M}")
-    (HERE / "candidate_prior.json").write_text(json.dumps(full, ensure_ascii=False), encoding="utf-8")
+    (HERE.parent / "results" / "candidate_prior.json").write_text(json.dumps(full, ensure_ascii=False), encoding="utf-8")
     print("noise ใหม่:", full["noise"], "· เดิม:", cur["noise"])
     better = len(diffs_new) >= 30 and m_n > 2 * se_n
     print("ตัดสิน:", "ดีกว่าชัด" if better else "ยังไม่ชัด → ไม่เปลี่ยน")
     if better and "--apply" in sys.argv:
-        bak = HERE / f"appraisal_prior_backup_{datetime.now():%H%M}.json"
+        bak = HERE.parent / "results" / "backups" / f"appraisal_prior_backup_{datetime.now():%H%M}.json"
         shutil.copy(AGENT / "appraisal_prior.json", bak)
-        shutil.copy(HERE / "candidate_prior.json", AGENT / "appraisal_prior.json")
+        shutil.copy(HERE.parent / "results" / "candidate_prior.json", AGENT / "appraisal_prior.json")
         print("คัดลอกทับ agent/appraisal_prior.json แล้ว · สำรอง:", bak.name)
 
 

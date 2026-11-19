@@ -2,7 +2,7 @@
 K0 (สเปก B llm_trend_plan.md): เพดาน oracle ของการเลือก k รายผู้ซื้อ-รายรอบ บน replay ด่าน 2 (ไม่ใช้ LLM)
 ต่อจุด (ผู้ซื้อ, รอบถัดไป) ลอง k ∈ {1.0, 2.0} โดยจุดอื่นคง 1.5 → ผลต่าง PR · oracle ≈ ผลรวมส่วนที่บวก (ขอบบนแบบประมาณ)
 แล้วยืนยันด้วยการใช้ k ที่ดีสุดทุกจุดพร้อมกันในการรันเดียว · replay (ซองตรวจสเปก = ตก)
-รันในโฟลเดอร์ work/day18/agent"""
+รันในโฟลเดอร์ work/day20/agent"""
 import json
 import os
 import subprocess
@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 HERE = Path(__file__).parent
-REPLAY = HERE.parent / "overnight" / "replay_label.py"
+REPLAY = HERE.parent / "tools" / "replay_label.py"
 C = [json.loads(x) for x in open(HERE / "trend_cases.jsonl", encoding="utf-8")]
 
 

@@ -1,0 +1,1010 @@
+{
+ "source": "ตลาดแข่งด่าน 2 · 18 พ.ย. 2026 · R1–R8 (RFQ จริง + ซองคู่แข่งต่อ RFQ + ราคาตัดต่อประเภทต่อรอบ)",
+ "rounds": [
+  [
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 15
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 24,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 30
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 15,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 11
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 24
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 1
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 24,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 14
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 15,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 25
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 39,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 33
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 17,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 24
+   }
+  ],
+  [
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 25,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 26
+   },
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 27,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 25
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 10
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 22
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 13
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 16
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 17,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 21
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 29,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 30
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 23,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 20
+   }
+  ],
+  [
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 21,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 25
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 24,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 27
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 14,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 27
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 12,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 9
+   },
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 8,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 10
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 16
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 21,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 24
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 15
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 34,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 22
+   }
+  ],
+  [
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 24,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 27
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 18,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 17
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 8,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 17
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 13
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 8,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 15
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 23,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 26
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 20,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 26
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 16,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 15
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 25,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 21
+   }
+  ],
+  [
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 9,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 16
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 13
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 15,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 21
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 27,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 29
+   },
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 21,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 25
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 15,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 13
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 27,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 29
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 16
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 20,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 19
+   }
+  ],
+  [
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 21,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 22
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 17,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 27
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 8
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 20,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 15
+   },
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 14,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 28
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 32,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 25
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 16,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 16
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 13
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 14,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 17
+   }
+  ],
+  [
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 10
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 11,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 10
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 30,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 29
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 14,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 5
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 12,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 19
+   },
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 21,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 27
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 27,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 17
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 13
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 19,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 16
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 6,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   }
+  ],
+  [
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 7,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 31,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 28
+   },
+   {
+    "buyer": "2 บางกอกบลูม",
+    "buyer_type": "SPECIALTY",
+    "bags": 8,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 17
+    },
+    "offers": 0
+   },
+   {
+    "buyer": "6 ทรีอินวันฟู้ดส์",
+    "buyer_type": "INSTANT",
+    "bags": 10,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 15.0,
+     "min_screen": null
+    },
+    "offers": 24
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 12,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 5
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 4,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 5
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 22,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 14
+   },
+   {
+    "buyer": "4 ชุมพรคั่วบด",
+    "buyer_type": "COMMERCIAL",
+    "bags": 21,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 9
+   },
+   {
+    "buyer": "5 อินสแตนท์ไทย",
+    "buyer_type": "INSTANT",
+    "bags": 22,
+    "spec": {
+     "max_defect_pct": 15.0,
+     "max_moisture_pct": 14.0,
+     "min_screen": null
+    },
+    "offers": 21
+   },
+   {
+    "buyer": "1 ดอยช้างโรสเตอร์",
+    "buyer_type": "SPECIALTY",
+    "bags": 5,
+    "spec": {
+     "max_defect_pct": 3.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": 16
+    },
+    "offers": 7
+   },
+   {
+    "buyer": "3 สยามคอมเมิร์ซ",
+    "buyer_type": "COMMERCIAL",
+    "bags": 16,
+    "spec": {
+     "max_defect_pct": 7.0,
+     "max_moisture_pct": 12.5,
+     "min_screen": null
+    },
+    "offers": 9
+   }
+  ]
+ ],
+ "clear": {
+  "SPECIALTY": [
+   1.0304,
+   1.0096,
+   0.985,
+   0.9787,
+   1.003,
+   0.9798,
+   0.9699,
+   0.9546
+  ],
+  "COMMERCIAL": [
+   1.0432,
+   1.0267,
+   1.0352,
+   1.0212,
+   1.0222,
+   1.0201,
+   1.0177,
+   1.0073
+  ],
+  "INSTANT": [
+   0.9474,
+   0.9188,
+   0.9247,
+   0.9121,
+   0.9347,
+   0.9005,
+   0.8707,
+   0.8694
+  ]
+ }
+}

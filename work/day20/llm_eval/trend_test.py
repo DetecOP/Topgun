@@ -1,7 +1,7 @@
 """LLM ทำนายทิศราคาตัดรอบหน้า (up/flat/down) จากประวัติข้ามรอบ · ข้อมูลตลาดแข่งด่าน 2 จริง (trend_cases.jsonl)
 แบบ raw = ประวัติราคาตัดรายรอบ · แบบ feat = + ข้อเท็จจริงที่ Python คำนวณ (เปลี่ยนรอบล่าสุด · ห่างจากค่าเฉลี่ย · fill · ซองต่อกระสอบ)
 เทียบกับ baseline: down เสมอ 19/34 · กลับทิศรอบล่าสุด 22/34 · gateway :4000 · ห่าง 4 วิ/คำขอ · ไม่แตะตลาด
-python ../../day20/llm_eval/trend_test.py raw|feat   (รันในโฟลเดอร์ work/day18/agent)"""
+python ../llm_eval/trend_test.py raw|feat   (รันในโฟลเดอร์ work/day20/agent)"""
 import json
 import os
 import sys

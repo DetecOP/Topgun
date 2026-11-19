@@ -10,7 +10,7 @@ import sys
 H = os.path.dirname(os.path.abspath(__file__))
 since = sys.argv[1] if len(sys.argv) > 1 else "000000"
 by = collections.defaultdict(list)
-for f in sorted(glob.glob(os.path.join(H, "sandbox_agent/logs/runs/decisions-*.jsonl"))):
+for f in sorted(glob.glob(os.path.join(H, "..", "data", "sandbox_agent", "logs", "runs", "decisions-*.jsonl"))):
     parts = os.path.basename(f)[:-6].split("-")      # decisions-YYYYMMDD-HHMMSS-tag
     if parts[1] + parts[2] < "20261119" + since:
         continue

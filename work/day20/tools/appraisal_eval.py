@@ -1,6 +1,6 @@
 """วัดคะแนนประเมินมูลค่า (20 × (1 − MAPE/10%) ตัดที่ 0 · ต่อเกม) บนเกมตลาดฝึกที่ prior ปัจจุบันไม่เคยเห็น (หลัง 01:33 19 พ.ย.)
 เทียบ: sample · hybrid (HYBRID_MAX ต่างๆ) · bayes · เพดาน "oracle" (รู้ค่าจริง defect/ชื้น ไม่รู้ screen ฯลฯ)
-รันในโฟลเดอร์ work/day18/agent"""
+รันในโฟลเดอร์ work/day20/agent"""
 import json
 import math
 import os
@@ -12,12 +12,12 @@ sys.path.insert(0, os.getcwd())
 import appraisal  # noqa: E402
 
 HERE = Path(__file__).parent
-RULES = json.loads((HERE / "sandbox_rules.json").read_text(encoding="utf-8"))
+RULES = json.loads((HERE.parent / "data" / "sandbox_rules.json").read_text(encoding="utf-8"))
 SINCE = sys.argv[1] if len(sys.argv) > 1 else "2026-11-19T01:34"
 LIMIT = int(sys.argv[2]) if len(sys.argv) > 2 else 600
 
 games = []
-for f in sorted((HERE / "sandbox_agent" / "logs" / "runs").glob("*.jsonl")):
+for f in sorted((HERE.parent / "data" / "sandbox_agent" / "logs" / "runs").glob("*.jsonl")):
     for line in open(f, encoding="utf-8"):
         if '"reveal"' not in line[:80]:
             continue

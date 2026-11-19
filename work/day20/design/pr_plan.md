@@ -1,6 +1,7 @@
 # แผนเพิ่ม PR 0.966 → ≥ 0.976 · ผู้ออกแบบ (Session B) · 19 พ.ย. 2026
 
-ที่มาข้อมูล: `work/day18/agent/logs/decisions.jsonl` (ตลาดแข่งด่าน 2 จริง · อ่านอย่างเดียว) · `mock_real_rounds.json` · `day20/overnight/replay.py`, `tune_summary.md`, `NIGHT_LOG.md` · `RUN.md`
+ที่มาข้อมูล (path หลังจัดโครงสร้างใหม่ 19 พ.ย.): `work/day20/data/stage2_competition/decisions.jsonl` (ตลาดแข่งด่าน 2 จริง · อ่านอย่างเดียว · เดิม day18/agent/logs) · `mock_real_rounds.json` · `work/day20/tools/replay.py`, `tune_summary.md` (เดิม day20/overnight/) · `work/day20/results/NIGHT_LOG.md` · `work/day20/agent/RUN.md`
+**agent ที่ใช้แข่ง = `work/day20/agent`** (ไม่ใช้ day18)
 หลักการ: ใช้พฤติกรรมตลาดแข่งจริงเท่านั้น · ตลาดฝึก (บอท) ใช้แค่เพดานบน/ข้อมูลประเมิน · ตัวเลขที่ไม่มีในเอกสาร = "ยังไม่ทราบ"
 
 ---

@@ -1,0 +1,8 @@
+# ข้อมูลตลาดฝึกขนาดใหญ่ + สำเนาโค้ดที่ใช้รันตลาดฝึก (ไม่ใช่ชุดแข่ง)
+data/sandbox_agent/
+data/sandbox_pre_competition/
+# log ระหว่างรัน
+results/*.out
+results/backups/
+agent/handin.zip
+agent/__pycache__/

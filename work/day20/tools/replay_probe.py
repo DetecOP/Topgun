@@ -4,7 +4,7 @@ import strategy, mock_market as mm
 from inventory import spec_ok
 class Mem:
     def __init__(s, sent, rounds): s.sent, s.rounds = sent, rounds
-ev=[json.loads(l) for l in open("logs/decisions.jsonl",encoding="utf-8")]
+ev=[json.loads(l) for l in open(__import__("os").environ.get("STAGE2_LOG", str(__import__("pathlib").Path(__file__).resolve().parents[1] / "data" / "stage2_competition" / "decisions.jsonl")), encoding="utf-8")]
 ng=[e for e in ev if e["event"]=="new_game"][0]; samples=ng["samples"]
 tv=next(e["tv"] for e in ev if e["event"]=="appraisal_sent")
 rules=dict(mm.RULES); rules["timeline"]=dict(rules["timeline"], **ng["timeline"])
@@ -28,13 +28,7 @@ for i,rid in enumerate(order):
     state={"round":o["round"],"lots":lots,"rfqs":o["rfqs"],"capacity_left_kg":o["round_capacity_kg"],
            "round_capacity_kg":o["round_capacity_kg"],"my_open_offers":[],"seconds_left":200}
     ctx=strategy.Context(rules, ng["calendar"], tv, random.Random(7), Mem({},hist), None, 200)
-    _lab=json.loads(_os.environ.get("LABEL_ENV","{}")) if _os.environ.get("LABEL_ROUND")==rid else {}
-    if _os.environ.get("LABEL_MAP"): _lab=json.loads(_os.environ["LABEL_MAP"]).get(rid,{})
-    _old={k:_os.environ.get(k) for k in _lab}; _os.environ.update(_lab)
     offers,_=strategy.decide(state, ctx)
-    for k,v in _old.items():
-        if v is None: _os.environ.pop(k,None)
-        else: _os.environ[k]=v
     rows={r["rfq_id"]:r for r in results[rid]["market_summary"]}; spec={r["rfq_id"]:r["spec"] for r in o["rfqs"]}
     line=[]; sold=0; rev=0
     for of in offers:
