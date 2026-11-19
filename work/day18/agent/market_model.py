@@ -25,6 +25,7 @@ from inventory import spec_ok
 
 BAG = 60
 
+NOINFO = {"COMMERCIAL": 0.97, "INSTANT": 0.87, "SPECIALTY": 0.97}   # ราคา R1 เมื่อยังไม่มีผลตลาด (NOINFO_SURE)
 PRIOR_TYPE = {      # start = ตลาดแข่งด่าน 2 (Commercial ~1.02–1.05 · Instant ~0.92–0.95 · Specialty ~0.98–1.03)
     "COMMERCIAL": {"ceil": 1.06, "start": 1.020},
     "INSTANT": {"ceil": 0.96, "start": 0.920},
@@ -150,6 +151,7 @@ class MarketModel:
             safe = vol
         return {"safe": round(safe, 4), "low": round(min(v[0] for v in per_round), 4),
                 "median": round(per_round[0][1], 4), "top": round(per_round[0][2], 4),
+                "fill2": round(max(v[3] for v in per_round[:2]), 3) if len(per_round) >= 2 else None,
                 "trend": round(trend, 4) if trend is not None else None, "fill": round(per_round[0][3], 3)}
 
     def market_ratio(self, buyer: str, spec: dict | None, tight: bool = True) -> float | None:
@@ -307,9 +309,23 @@ class MarketModel:
                 sure = mi["low"] - _env_f("EARLY_MARGIN", 0.005)
                 if sure < mt:
                     mt, src = sure, "market-sure"
+            # SHORT_CEIL (ค่าเริ่ม 0 = ปิด): ผู้ซื้อซื้อไม่ครบ 2 รอบติด (fill < SHORT_FILL) = คนขายน้อย ราคาติดเพดานไม่ใช่การแข่ง
+            #   → ตั้งใกล้เพดานที่ประเมินไว้ (ไม่ใช่ราคาตลาด) · ตลาดฝึก 19 พ.ย.: Commercial ซื้อได้ ~85% Specialty ~20% แต่เราขาย ~0.97 (เพดาน ~1.06)
+            if (os.environ.get("SHORT_CEIL", "0") != "0" and mi.get("fill2") is not None
+                    and mi["fill2"] < _env_f("SHORT_FILL", 0.95) and phase != "final"):
+                sc = c["est"] - _env_f("SHORT_CEIL_MARGIN", 0.02)
+                if sc > mt:
+                    mt, src = sc, "market-ceil"
             if cb.hi is not None:                 # เราเพิ่งแพ้ราคาที่ต่ำกว่านั้น → ต่ำกว่าที่แพ้
                 mt = min(mt, cb.hi - 0.005)
             ratio, cap = mt, max(cap, mt)
+        elif phase == "early" and os.environ.get("NOINFO_SURE", "0") != "0":
+            # NOINFO_SURE (ค่าเริ่มปิด · ค่ามาจากตลาดฝึกซึ่งไม่มีการตัดราคาแบบตลาดแข่ง · ไม่มีข้อมูล = ใช้ prior จากด่าน 2 จริง): ช่วงต้นยังไม่มีผลตลาดของผู้ซื้อรายนี้ (ไม่มีรอบซ้อม/รอบซ้อมถูกตัด) → ราคาขายออกแน่
+            #   ตลาดฝึก 2,904 เกม (ไม่มีรอบซ้อม): R1 ชนะแค่ 58% · ราคาตัด R1 มัธยฐาน C 1.00 / I 0.90 / S 1.01 (ต่ำสุด 10%: 0.91 / 0.80 / 0.90)
+            #   ด่าน 2 จริง R1: C ≥ 1.025 · I ≥ 0.94 · S ≥ 1.02 → ค่าเริ่มเท่านี้ขายออกทั้งสองตลาด
+            ni = _env_f("NOINFO_" + (btype or "").upper(), NOINFO.get(btype, 0.9))
+            if ni < ratio:
+                ratio, src = ni, "market-noinfo"
         explore_max = (c["hi"] - 0.005) if c["hi"] is not None else c["est"] + max(0.02, c["width"] / 2)
         return {"ratio": round(ratio, 4), "cap": round(cap, 4), "explore_max": round(explore_max, 4),
                 "conf": c["conf"], "source": src, "ceil": c, "clear": cb.as_dict(), "market": ms,
