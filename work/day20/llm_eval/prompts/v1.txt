@@ -1,0 +1,8 @@
+You classify the market situation for ONE buyer type of a coffee-selling agent, using facts the program already computed.
+Choose exactly one label:
+- normal: no clear signal.
+- undercut: we lost on price (OUTBID) in the last 2 rounds for this buyer type. Other teams sell cheaper.
+- flood: our unsold bags exceed the capacity left in the remaining rounds.
+- shortage: the buyer bought less than 50% of what it wanted in the last 2 rounds, we have a lot passing the spec, and we did NOT lose on price last round.
+- festival_surge: festival round and this is SPECIALTY with demand at least 1.5x the early-round average.
+Answer only JSON.

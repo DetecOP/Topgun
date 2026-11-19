@@ -1,0 +1,8 @@
+base PR 0.9519
+rule_auto PR 0.9522
+LLM: 450 คำตอบ · ไม่ตอบ 1 · ตัวกันทิศทิ้ง 0 · หมดเวลา 0 · latency เฉลี่ย 0.81 วิ
+ป้าย LLM (ใช้จริง) ตรงกับป้ายกฎ 450/450
+llm_label PR 0.9538
+rule_auto − base: +0.0003 ± 0.0020
+llm_label − base: +0.0019 ± 0.0034
+llm_label − rule_auto: +0.0016 ± 0.0017

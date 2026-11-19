@@ -384,4 +384,66 @@ rule_advisor.rule_labels(Mem({}, []), rs, 15)
 ob, _ = strategy.decide(rs, cb)
 check(oa == ob, "เรียกตัวช่วยกฎแล้ว ซองที่ส่งเหมือนเดิมทุกตัว")
 
+print("19. LLM อ่านข้อเท็จจริง (llm_label · LLM ปลอม ไม่เรียก gateway)")
+import llm_label  # noqa: E402
+
+
+class FakeLLM:
+    def __init__(self, answers):
+        self.answers, self.last_error = list(answers), None
+
+    def ask_json(self, system, user, schema, timeout=None):
+        return self.answers.pop(0) if self.answers else None
+
+
+rl = rule_advisor.rule_labels(Mem(sent18, [rnd18("R1", "OUTBID", 0.4), rnd18("R2", "OUTBID", 0.3)]), st18(3), 15)
+chk = lambda **k: {"check_flood": False, "check_undercut": False, "check_shortage": False, "check_festival": False,  # noqa: E731
+                   "label": "normal", "reason": "x", **k}
+llm_label._CLIENT = FakeLLM([chk(check_undercut=True, check_festival=True, label="festival_surge"), chk(), chk()])
+ll = llm_label.ask_labels(rl)
+check(ll["COMMERCIAL"]["final"] == "undercut", "ป้ายคิดจากผลตรวจของ LLM ตามลำดับ (undercut มาก่อน festival แม้ LLM เขียนป้ายผิด)")
+llm_label._CLIENT = FakeLLM([chk(check_shortage=True, label="shortage"), chk(), chk()])
+ll = llm_label.ask_labels(rl)
+check(ll["COMMERCIAL"]["final"] == rl["COMMERCIAL"]["label"] and ll["COMMERCIAL"]["guard"],
+      "ตัวกันทิศ: LLM บอก shortage ตอนเราแพ้ราคา → ทิ้ง ใช้ป้ายของกฎ")
+llm_label._CLIENT = FakeLLM([])
+ll = llm_label.ask_labels(rl)
+check(all(v["final"] == rl[t]["label"] and v["guard"] == "LLM ไม่ตอบ" for t, v in ll.items()), "LLM ล่ม/ไม่ตอบ → ใช้ป้ายของกฎทุกประเภท")
+os.environ["LLM_LABEL_MIN_GAP"] = "0.3"
+llm_label._CLIENT = FakeLLM([chk()] * 6)
+llm_label._LAST[0] = 0.0
+t_a = __import__("time").perf_counter()
+llm_label.ask_labels(rl)
+el = __import__("time").perf_counter() - t_a
+os.environ.pop("LLM_LABEL_MIN_GAP")
+check(el >= 0.55, f"ตัวคุมอัตราทำงานแม้ time.sleep ถูกปิด (3 คำขอห่างกัน ≥ 0.3 วิ: ใช้ {el:.2f} วิ)")
+llm_label._CLIENT = None
+check(llm_label.mode() == "off", "ค่าเริ่ม LLM_LABEL = off")
+# shadow ไม่เปลี่ยนซอง: เล่นเกมจำลองเต็มเกม (LLM ปลอมตอบ shortage/undercut ทุกครั้ง) · ซองที่ส่ง = ซองที่จำ · ไม่มี offers_replaced
+import json as _json  # noqa: E402
+import contextlib as _cl  # noqa: E402
+import io as _io  # noqa: E402
+os.environ.update(LLM_LABEL="shadow", LLM_LABEL_MIN_GAP="0", MOCK_STYLE="real", MOCK_STAGE="3")
+llm_label._CLIENT = FakeLLM([chk(check_shortage=True, label="shortage"), chk(check_undercut=True, label="undercut")] * 200)
+with _cl.redirect_stdout(_io.StringIO()):
+    gm = mm.FakeMarket(77, 0.3)
+    agent_main.play(gm, None, forever=False)
+for k in ("LLM_LABEL", "LLM_LABEL_MIN_GAP", "MOCK_STYLE", "MOCK_STAGE"):
+    os.environ.pop(k, None)
+llm_label._CLIENT = None
+ev19 = [_json.loads(x) for x in open(agent_main.LOG_FILE, encoding="utf-8")]
+i_new = max(i for i, e in enumerate(ev19) if e["event"] == "new_game")
+ev19 = ev19[i_new:]
+sent_ev = {e["round"]: e["offers"] for e in ev19 if e["event"] == "offers_sent"}
+lab_ev = [e for e in ev19 if e["event"] == "llm_label"]
+order_ok = all(next(i for i, x in enumerate(ev19) if x["event"] == "offers_sent" and x["round"] == e["round"])
+               < ev19.index(e) for e in lab_ev)
+check(len(lab_ev) >= 10 and order_ok and not any(e["event"] in ("offers_replaced", "rule_auto") for e in ev19),
+      f"shadow: LLM ถามหลังส่งซองทุกรอบ ({len(lab_ev)} รอบ) · ไม่มีการส่งซองแทน/เปลี่ยนค่า")
+mem19 = _json.loads(sorted(agent_main.LOGS.glob("memory-*.json"), key=lambda p: p.stat().st_mtime)[-1].read_text(encoding="utf-8"))
+same = all([{k: o[k] for k in ("rfq_id", "lot_id", "kg", "price_per_kg")} for o in mem19["sent"].get(r, [])] ==
+           [{k: o[k] for k in ("rfq_id", "lot_id", "kg", "price_per_kg")} for o in offs] for r, offs in sent_ev.items() if offs)
+check(same and not any(os.environ.get(k) for k in ("SHORT_CEIL", "MKT_K_COMMERCIAL", "SELL_SHIFT_COMMERCIAL")),
+      "shadow: ซองที่จำ = ซองที่ส่งทุกรอบ · ไม่ตั้งค่าใดๆ แม้ LLM ตอบ shortage/undercut")
+
 print(f"\nผ่านทั้งหมด {ok} ข้อ · log ทดสอบ: {agent_main.LOGS}")

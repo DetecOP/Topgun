@@ -17,6 +17,7 @@ from datetime import datetime
 from pathlib import Path
 
 import advisor
+import llm_label
 import rule_advisor
 import flags
 import playbook
@@ -235,7 +236,18 @@ def play(api: Market, llm: LLM | None, forever: bool) -> None:
                 try:
                     lab = rule_advisor.rule_labels(memory, state, total, (state.get("round") or {}).get("calendar", ""))
                     print(rule_advisor.format_line(rid, lab), flush=True)
-                    if os.environ.get("RULE_AUTO", "0") == "1":     # ทดสอบในตลาดจำลองเท่านั้น
+                    if llm_label.mode() in ("shadow", "label"):     # LLM ผู้จัดอ่านข้อเท็จจริง (หลังส่งซองแล้ว)
+                        left_s = (state.get("seconds_left") or 60) - (time.time() - t0) - 15
+                        ll = llm_label.ask_labels(lab, budget_s=max(0.0, min(60.0, left_s)))
+                        log("llm_label", round=rid, mode=llm_label.mode(), labels=ll)
+                        print("    LLM: " + " · ".join(f"{t[:4]}={v['llm']}" + (f" (ใช้ {v['final']}: {v['guard']})" if v["guard"] else "")
+                                                     for t, v in ll.items()), flush=True)
+                        if llm_label.mode() == "label":
+                            lab = {t: {**lab[t], "label": ll[t]["final"]} for t in lab}
+                            ch = rule_advisor.auto_apply(lab, (state.get("round") or {}).get("number") or 1)
+                            if ch:
+                                log("rule_auto", round=rid, changes=ch, source="llm_label")
+                    if os.environ.get("RULE_AUTO", "0") == "1" and llm_label.mode() != "label":   # ทดสอบในตลาดจำลอง
                         ch = rule_advisor.auto_apply(lab, (state.get("round") or {}).get("number") or 1)
                         if ch:
                             log("rule_auto", round=rid, changes=ch)

@@ -71,7 +71,12 @@ def rule_labels(memory, state: dict, total: int, calendar_label: str = "") -> di
         else:
             label, why = "normal", ("รอบก่อนขายครบ" if sold_all else "ไม่มีสัญญาณ")
         out[t] = {"label": label, "reason": why, "rec": REC[label](t), "sold_all": bool(sold_all),
-                  "lost_last": bool(lost and lost[-1]), "sellable": sellable, "cap_left": cap * left}
+                  "lost_last": bool(lost and lost[-1]), "sellable": sellable, "cap_left": cap * left,
+                  "facts": {"buyer_type": t, "round": (state.get("round") or {}).get("round_id"), "calendar": calendar_label or "",
+                            "unsold_bags_exceed_capacity_left": bool(flood), "we_lost_outbid_both_last_2_rounds": bool(lost2),
+                            "we_lost_outbid_last_round": bool(lost and lost[-1]), "we_sold_all_last_round": bool(sold_all),
+                            "buyer_bought_under_50pct_both_last_2_rounds": len(fills) == 2 and all(f < 0.5 for f in fills),
+                            "we_have_lot_passing_spec": bool(eligible), "specialty_festival_demand_surge": bool(fest)}}
     return out
 
 

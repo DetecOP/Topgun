@@ -49,7 +49,7 @@
 ก่อนวันแข่ง: แก้ `.env.competition` ให้ `MARKET_URL` / `TEAM_KEY` / `LLM_BASE_URL` เป็นของด่าน 3 (**ยังไม่ทราบ** · ถามผู้จัด)
 
 ```powershell
-$env:PYTHONIOENCODING="utf-8"; $env:AGENT_ENV=".env.competition"; $env:USE_LLM="0"
+$env:PYTHONIOENCODING="utf-8"; $env:AGENT_ENV=".env.competition"; $env:USE_LLM="0"; $env:LLM_LABEL="shadow"
 ```
 ```powershell
 & "C:\Users\guttj\Documents\TGR2026\starter\Coffee-TESA-starter\.venv\Scripts\python.exe" main.py
@@ -97,8 +97,12 @@ $env:PYTHONIOENCODING="utf-8"; $env:AGENT_ENV=".env.competition"; $env:USE_LLM="
 | คนเฝ้าจอตามไม่ทัน / ต้องรีสตาร์ทบ่อย | – | รีสตาร์ทพร้อม `$env:RULE_AUTO="1"` (agent ทำตามตารางนี้เอง · มีผลรอบถัดไป · จำลอง 300 เกม: ไม่แย่กว่าฐาน · เกมแย่สุดดีขึ้น) | – |
 ทดสอบมองย้อนกับข้อมูลด่าน 2: ในสถานการณ์ปกติทุกชุดค่าไม่ช่วย (เท่าเดิมหรือลด) → ทำตามเฉพาะเงื่อนไขข้างบน · ทุกครั้งที่เปลี่ยน = Ctrl+C แล้วรันใหม่ (ไม่ส่งซ้ำ)
 **LLM / AI วันแข่ง** (ผู้ใช้ชี้แจงกติกา 19 พ.ย.):
-- **agent**: ใช้ได้แค่ LLM ของผู้จัด (gateway) → ปิด (`USE_LLM=0`) · gateway ทดสอบไม่ได้ 19 พ.ย.
+- **agent**: ใช้ได้แค่ LLM ของผู้จัด (gateway) · ตัวปรับราคาแบบเก่าปิด (`USE_LLM=0` ห้ามเปิด: เคยขึ้นราคาหลังแพ้) · ตัวอ่านป้ายใหม่ `LLM_LABEL` (off/shadow/label) ผ่านชุดทดสอบ 19 พ.ย. ที่ gateway :4000 (ป้ายตรงกฎ 100%) · ผู้ใช้ยืนยัน: วันแข่งใช้ gateway :4000 อันเดียวกัน (`.env.competition` ตั้งแล้ว · ping ผ่าน 19 พ.ย. 18:4x) · ตรวจอีกครั้งด้วย `python llm_ping.py` (AGENT_ENV=.env.competition) ก่อน 09:30 · ถ้า P1–P2 latency > 30 วิ → `$env:LLM_LABEL="off"`
 - **คนในทีมใช้ AI (Claude Code) ตรวจ log และแก้โค้ด/ค่าตั้งระหว่างแข่งได้** (เป็นเทคนิค) · ขั้นตอน: `work/day20/design/raceday_protocol.md` — หลังจับคู่แต่ละรอบ A ส่ง round_results (my_offers + market_summary) + rule_advice + ของเหลือ/capacity ให้ B → B ตอบ ≤ 1 นาที (ทำ/ไม่ทำ + `$env:` + เหตุผล) · B ตอบไม่ทัน = ใช้ rule_advisor + ตารางข้างบน · แก้โค้ดกลางแข่งเฉพาะบั๊ก แล้วรัน `test_agent.py` ก่อนรีสตาร์ท · เปลี่ยนค่าเมื่อผู้ใช้สั่ง "แก้เลย"
+- **LLM วันแข่ง = `LLM_LABEL=shadow`** (คำตัดสิน B · `llm_behavior_test.md` รอบ 3): บันทึก + พิมพ์บรรทัด `LLM: ...` ใต้ `[ตัวช่วยกฎ]` · ไม่เปลี่ยนซอง/ค่า (test ยืนยัน)
+  - ปิด (`$env:LLM_LABEL="off"` แล้วรีสตาร์ท) ทันทีถ้า: P1–P2 ไม่ตอบ / p95 ≥ 20 วิ / error ต่อเนื่อง (ดู log `llm_label` · guard "LLM ไม่ตอบ") · หรือ `offers_sent.seconds` ช้าผิดปกติ/agent ค้าง
+  - คนตามไม่ทัน → `RULE_AUTO=1` (ไม่ใช่ `LLM_LABEL=label`) · ห้ามทดสอบ/วงปิดกับ gateway วันแข่ง (นอกจาก llm_ping ครั้งเดียว)
+  - บทเรียน 18 พ.ย. (ยืนยัน 19 พ.ย.): ให้ LLM ตีความตัวเลขดิบ → ตอบ "แพ้ราคาแล้วขึ้นราคา" ซ้ำ 10/10 · แก้ด้วย Python ตีความเป็น yes/no + LLM ตอบผลตรวจรายข้อ + Python เรียงป้ายเอง + ตัวกันทิศ
 - ห้ามส่ง/แก้/ยกเลิกซองหรือผลประเมินด้วยมือเหมือนเดิม
 - ก่อน 09:30: ส่ง B บรรทัดแรกของ agent + `new_game` (ล็อต · ตัวอย่าง · ปฏิทิน)
 

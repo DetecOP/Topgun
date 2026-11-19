@@ -1,0 +1,1 @@
+{"ver": "v1", "T1": true, "T2": false, "t2": [6, 6, 6], "dir": [9, 9], "T3": [14, 20, 1], "T3_pass": false, "miss": [["undercut", "shortage"], ["flood", "normal"], ["flood", "normal"], ["flood", "undercut"], ["shortage", "normal"], ["festival_surge", "normal"]], "p95": 0.6490702629089355, "fails": 0}
