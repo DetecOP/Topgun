@@ -9,6 +9,7 @@
 """
 import json
 import math
+import os
 import random
 import shutil
 import sys
@@ -151,6 +152,10 @@ class FakeMarket:
         self.phase, self.round_no, self.calls = "APPRAISAL", 0, 0
         self.appraised, self.open, self.rfqs, self.last = None, [], [], None
         self.revenue, self.kg_sold = 0.0, 0
+        self.kg_early = 0          # ขายได้ใน R1–R2 (วัดเป้า 'ขายออกตั้งแต่สองรอบแรก')
+        # รอบซ้อม (ด่าน 3 มี P1–P2 · ไม่นับคะแนน ไม่เสียของ) · MOCK_PRACTICE = จำนวนรอบซ้อม (ค่าเริ่ม 2 ถ้าด่าน 3)
+        self.n_practice = int(os.environ.get("MOCK_PRACTICE", "2" if stage3() else "0"))
+        self.practice = 0          # รอบซ้อมที่กำลังเปิด (0 = รอบจริง)
 
     # ---------- API ----------
     def calendar(self):
@@ -171,10 +176,13 @@ class FakeMarket:
     def state(self):
         self.calls += 1
         if self.phase == "APPRAISAL" and (self.appraised or self.calls > 2):
-            self._open(1)
+            self._open(1, practice=1 if self.n_practice else 0)
         elif self.phase == "ROUND_OPEN" and (self.open or self.calls > 3) and self.calls > 1:
             self._clear()
-            if self.round_no >= self.rules["timeline"]["rounds"]:
+            if self.practice:
+                k = self.practice
+                self._open(1, practice=k + 1 if k < self.n_practice else 0)
+            elif self.round_no >= self.rules["timeline"]["rounds"]:
                 self.phase = "CLOSED"
             else:
                 self._open(self.round_no + 1)
@@ -202,9 +210,13 @@ class FakeMarket:
         raise MarketError(400, {"error": {"code": "NOT_IN_MOCK", "message": "single offers not simulated"}})
 
     # ---------- ภายใน ----------
-    def _open(self, n):
+    def _rid(self):
+        return f"P{self.practice}" if self.practice else f"R{self.round_no}"
+
+    def _open(self, n, practice=0):
         r = self.rng
         self.phase, self.round_no, self.calls, self.open = "ROUND_OPEN", n, 0, []
+        self.practice = practice           # รอบซ้อมใช้ RFQ แบบ R1 (ปฏิทินปกติ)
         row = cal_row(self.cal, n)
         w, spec_share = row["demand_weight"], row["specialty_share"]
         self.rfqs = []
@@ -212,7 +224,7 @@ class FakeMarket:
             fest = "เทศกาล" in (row.get("label") or "")
             for i, t in enumerate(real_data()["rounds"][real_idx(n, self.rules["timeline"]["rounds"])], 1):
                 bags = max(1, round(t["bags"] * w * (_env_f("FEST_DEMAND", 1.6) if fest and t["buyer_type"] == "SPECIALTY" else 1.0)))
-                self.rfqs.append({"rfq_id": f"R{n}-{i:02d}", "buyer": t["buyer"], "buyer_id": t["buyer"][:1],
+                self.rfqs.append({"rfq_id": f"{self._rid()}-{i:02d}", "buyer": t["buyer"], "buyer_id": t["buyer"][:1],
                                   "buyer_type": t["buyer_type"], "kg": bags * 60, "bags": bags, "spec": dict(t["spec"]),
                                   "_ceil": REAL_CEIL.get(t["buyer"], 1.0) * r.gauss(1, 0.01), "_offers": t["offers"]})
             return
@@ -222,7 +234,7 @@ class FakeMarket:
             if stage3():                     # ด่าน 3: Specialty มาทุกรอบตามสัดส่วนในปฏิทิน
                 b = BUYERS[0] if r.random() < spec_share else r.choice(BUYERS[1:])
             bags = int(r.randint(6, 15) * w)
-            self.rfqs.append({"rfq_id": f"R{n}-{i:02d}", "buyer": b[1], "buyer_id": b[0], "buyer_type": b[2],
+            self.rfqs.append({"rfq_id": f"{self._rid()}-{i:02d}", "buyer": b[1], "buyer_id": b[0], "buyer_type": b[2],
                               "kg": bags * 60, "bags": bags, "spec": dict(SPEC[b[2]]),
                               "_ceil": b[3] * r.gauss(1, 0.015)})
 
@@ -276,9 +288,12 @@ class FakeMarket:
                     st = "ACCEPTED" if fill == kg else ("PARTIAL" if fill > 0 else "OUTBID")
                     results.append({**o, "status": st, "filled_kg": fill})
                     if fill:
-                        self.revenue += fill * o["price_per_kg"]
-                        self.kg_sold += fill
-                        lots[o["lot_id"]]["kg_remaining"] -= fill
+                        if not self.practice:          # รอบซ้อม: ไม่เสียของ ไม่ได้เงิน
+                            self.revenue += fill * o["price_per_kg"]
+                            self.kg_sold += fill
+                            if self.round_no <= 2:
+                                self.kg_early += fill
+                            lots[o["lot_id"]]["kg_remaining"] -= fill
             summary.append({"rfq_id": rfq["rfq_id"], "buyer": rfq["buyer"], "buyer_type": t, "wanted_kg": rfq["kg"],
                             "bought_kg": bought, "offers": len(book),
                             "price_min": round(min(prices), 2) if prices else None,
@@ -287,7 +302,7 @@ class FakeMarket:
         for l in self.lots:
             l["kg_available"] = l["kg_remaining"]
             l["kg_in_open_offers"] = 0
-        self.last = {"round_id": f"R{self.round_no}", "kind": "real", "my_offers": results, "market_summary": summary}
+        self.last = {"round_id": self._rid(), "kind": "practice" if self.practice else "real", "my_offers": results, "market_summary": summary}
         self.open = []
 
     def _state(self):
@@ -296,6 +311,9 @@ class FakeMarket:
             label = cal_row(self.cal, self.round_no)["label"]
             rnd = {"round_id": f"R{self.round_no}", "kind": "real", "number": self.round_no,
                    "of": self.rules["timeline"]["rounds"], "counts_for_score": True, "calendar": label}
+            if self.practice:
+                rnd = {"round_id": self._rid(), "kind": "practice", "number": self.practice,
+                       "of": self.n_practice, "counts_for_score": False, "calendar": "ปกติ"}
         used = sum(o["kg"] for o in self.open)
         lots = []
         for l in self.lots:
@@ -381,7 +399,8 @@ def run(seeds: list[int], noise: float) -> list[dict]:
     for s in seeds:
         m = FakeMarket(s, noise)
         agent_main.play(m, None, forever=False)
-        out.append({"seed": s, **m.score(), "sold_pct": round(m.kg_sold / sum(l["kg_total"] for l in m.lots) * 100)})
+        out.append({"seed": s, **m.score(), "sold_pct": round(m.kg_sold / sum(l["kg_total"] for l in m.lots) * 100),
+                    "early_bags": m.kg_early // 60})
     out.append({"logs": str(logs)})
     return out
 

@@ -275,4 +275,15 @@ tc, ts = vm.target("4 ชุมพรคั่วบด", "COMMERCIAL", com)["ra
 check(abs(tc - (128 / 125 - 1.5 * 0.0 - 0.005)) < 0.02, f"ชุมพรราคานิ่ง 1.024 → เว้นน้อย ({tc})")
 check(ts < 120 / 125 - 0.02, f"ดอยช้างขาลง 1.02→0.96 → เว้นมากกว่า ({ts})")
 
+print("15. ปฏิทินด่าน 3 รูปแบบไม่คุ้น → agent ไม่ล้ม")
+ni = agent_main.norm_info([{"rounds": [6, 7, 8], "label": "เทศกาลกาแฟ", "demand_weight": "มาก"}])
+check(ni["rules"]["timeline"]["rounds"] == 15 and len(ni["calendar"]) == 1, "ได้ list เปล่า → rounds สำรอง 15 · เก็บแถวปฏิทิน")
+ni2 = agent_main.norm_info({"items": [{"rounds": "13-14", "label": "ใกล้ปิดตลาด", "demand_weight": 0.7}],
+                            "rules": {"timeline": {"rounds": "15"}}})
+check(ni2["rules"]["timeline"]["rounds"] == 15 and ni2["calendar"][0]["rounds"] == "13-14", "calendar อยู่ใต้ items · rounds เป็นข้อความ")
+cw = pb.calendar_weights(ni["calendar"] + [{"rounds": "14-20", "demand_weight": None}], 15)
+check(cw[7]["label"] == "เทศกาลกาแฟ" and cw[7]["w"] == 1.0 and 20 not in cw, "demand_weight ไม่ใช่ตัวเลข → 1.0 · รอบเกินไม่เพิ่ม")
+ctx15 = strategy.Context(dict(mm.RULES), ni["calendar"], tv, random.Random(1), Mem({}, []), None, 200)
+check(isinstance(strategy.decide(mstate, ctx15)[0], list), "decide() ทำงานกับปฏิทินแปลก")
+
 print(f"\nผ่านทั้งหมด {ok} ข้อ · log ทดสอบ: {agent_main.LOGS}")

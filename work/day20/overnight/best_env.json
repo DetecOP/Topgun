@@ -1,0 +1,10 @@
+{
+ "MKT_K_COMMERCIAL": "1.0",
+ "SPREAD_GAP": "0.02",
+ "MKT_K_EARLY": "1.0",
+ "FESTIVAL_HOLD": "0.3",
+ "MARKET_FLOOR": "0.84",
+ "MKT_VOL_MARGIN": "0",
+ "EARLY_MARGIN": "0.0025",
+ "MKT_K": "1.25"
+}

@@ -11,7 +11,7 @@ import os
 # pace3 = งบกระสอบหารด้วยอัตราขายได้จริง + ใช้ capacity เต็มเมื่อของเสี่ยงขายไม่ทัน
 # practice4 (รอบซ้อมหยั่งราคา · ไม่ถาม LLM ในรอบซ้อม) มีผลเฉพาะรอบซ้อม · ตลาดฝึกไม่มีรอบซ้อม → พฤติกรรมเท่า pace3
 # จึงใช้ป้าย pace3 ต่อ ให้ชุด baseline/mid-push ที่กำลังทดลองอยู่ตารางเดียวกัน
-CODE_VERSION = "market1"   # 18 พ.ย. หลังแข่ง: ราคาจาก market_summary + ใช้ capacity เต็ม
+CODE_VERSION = "market2"   # 18 พ.ย. หลังแข่ง: ราคาจาก market_summary + ใช้ capacity เต็ม
 
 
 def active() -> list[str]:

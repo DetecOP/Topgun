@@ -110,7 +110,7 @@ class MarketModel:
         self.lot_samples = {l["lot_id"]: l["sample"] for l in lots if l.get("sample")}
         self.lot_tv = dict(tv or {})
 
-    def market_info(self, buyer: str, spec: dict | None) -> dict | None:
+    def market_info(self, buyer: str, spec: dict | None, k: float | None = None) -> dict | None:
         """ผลตลาดแข่งของผู้ซื้อรายนี้ (ratio = ราคาสูงสุดที่รับ ÷ TV สูงสุดของล็อตที่ผ่านสเปก = ขอบล่างของจุดตัด)
         คืน safe (ต่ำสุด 2 รอบล่าสุด) · median · top (สูงสุดรอบล่าสุด) · trend (คาดรอบหน้าถ้าราคาลงต่อเนื่อง) · fill"""
         if not spec or not self.lot_samples or os.environ.get("MARKET_PRICE", "1") == "0":
@@ -139,7 +139,8 @@ class MarketModel:
         mean = sum(meds) / len(meds)
         sd = (sum((x - mean) ** 2 for x in meds) / len(meds)) ** 0.5 if len(meds) > 1 else 0.02
         within = per_round[0][1] - per_round[0][0]           # ส่วนต่างระหว่าง RFQ ในรอบเดียวกัน
-        vol = min(per_round[0][1], mean) - _env_f("MKT_K", 1.5) * max(sd, within / 2) - _env_f("MKT_VOL_MARGIN", 0.005)
+        k = _env_f("MKT_K", 1.5) if k is None else k
+        vol = min(per_round[0][1], mean) - k * max(sd, within / 2) - _env_f("MKT_VOL_MARGIN", 0.005)
         trend = None
         if len(per_round) >= 3 and per_round[0][1] < per_round[1][1] < per_round[2][1]:
             # มัธยฐานลด 2 รอบติด (เหมือนราคาหุ้นขาลง) → คาดรอบหน้า = ล่าสุด − ความชันเฉลี่ย
@@ -147,7 +148,8 @@ class MarketModel:
             trend = per_round[0][0] + slope
         if os.environ.get("MKT_MODE", "vol") == "vol":
             safe = vol
-        return {"safe": round(safe, 4), "median": round(per_round[0][1], 4), "top": round(per_round[0][2], 4),
+        return {"safe": round(safe, 4), "low": round(min(v[0] for v in per_round), 4),
+                "median": round(per_round[0][1], 4), "top": round(per_round[0][2], 4),
                 "trend": round(trend, 4) if trend is not None else None, "fill": round(per_round[0][3], 3)}
 
     def market_ratio(self, buyer: str, spec: dict | None, tight: bool = True) -> float | None:
@@ -255,7 +257,8 @@ class MarketModel:
         return {"est": round(est, 4), "lo": lo, "hi": hi, "n": n, "width": round(width, 3),
                 "conf": round(conf, 2), "conflict": conflict, "prior": prior}
 
-    def target(self, buyer: str, btype: str, spec: dict | None = None, tight: bool = True) -> dict:
+    def target(self, buyer: str, btype: str, spec: dict | None = None, tight: bool = True,
+               phase: str | None = None) -> dict:
         """ratio ที่ควรเสนอ (ก่อนบันได/สุ่ม) + เพดานบนของส่วนหยั่ง + ความมั่นใจ
         มีราคาตลาด (market_summary) → ใช้ราคาตลาด − MKT_MARGIN ก่อนทุกอย่าง (ขายออกแน่และได้ราคาเต็มที่ตลาดให้)"""
         c = self.ceiling(buyer, btype)
@@ -277,7 +280,11 @@ class MarketModel:
         if ms["mode"] == "ceiling" and cb.hi is None:
             comp, src = max(comp, cap), "ceiling-bound"           # ผู้ซื้อซื้อไม่ครบ → ไม่ต้องตัดราคาแข่ง
         ratio = min(cap, comp)
-        mi = self.market_info(buyer, spec)
+        # k (ระยะเว้นราคา × ความผันผวน): MKT_K_<TYPE> แยกประเภท · MKT_K_EARLY ใช้ช่วงซ้อม/R1–R2 (ไม่ตั้ง = MKT_K)
+        k = _env_f("MKT_K_" + (btype or "").upper(), _env_f("MKT_K", 1.5))
+        if phase == "early" and os.environ.get("MKT_K_EARLY"):
+            k = _env_f("MKT_K_EARLY", k)
+        mi = self.market_info(buyer, spec, k)
         rm = None
         if mi is not None:
             rm = mi["safe"] if tight else mi["median"]
@@ -294,6 +301,12 @@ class MarketModel:
                 short = min(mi["top"] - 0.01, c["est"] - 0.01)
                 if short > mt:
                     mt, src = short, "market-short"
+            # EARLY_SURE (ช่วงซ้อม/R1–R2): ขายออกแน่ตอนราคายังสูง → ไม่เกินราคาตัดต่ำสุดที่ผู้ซื้อรายนี้เคยรับ (≤ 3 รอบ) − EARLY_MARGIN
+            #   ด่าน 2: R2 ชุมพรลดราคาตัดกะทันหัน 1.045 → 1.003 · k × ความผันผวนเว้นไม่พอเพราะ Commercial ราคานิ่ง
+            if phase == "early" and os.environ.get("EARLY_SURE", "1") != "0":   # ค่าเริ่มเปิด (19 พ.ย.)
+                sure = mi["low"] - _env_f("EARLY_MARGIN", 0.005)
+                if sure < mt:
+                    mt, src = sure, "market-sure"
             if cb.hi is not None:                 # เราเพิ่งแพ้ราคาที่ต่ำกว่านั้น → ต่ำกว่าที่แพ้
                 mt = min(mt, cb.hi - 0.005)
             ratio, cap = mt, max(cap, mt)

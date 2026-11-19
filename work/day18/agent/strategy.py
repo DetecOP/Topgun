@@ -247,7 +247,7 @@ def plan(state: dict, ctx: Context) -> list[dict]:
                 continue
             key = (rfq.get("buyer", ""), t)
             if key not in targets:
-                targets[key] = model.target(*key, spec=rfq["spec"], tight=tight)
+                targets[key] = model.target(*key, spec=rfq["spec"], tight=tight, phase=ph)
             tg = targets[key]
             ratio = tg["ratio"] + sc[t]["shift"] + ctx.adjust.get(t, 0.0)
             if tg["source"].startswith("market"):            # ราคาตลาดจริง = เพดานที่ยังขายออก → ไม่บวกเพิ่ม
@@ -277,7 +277,38 @@ def plan(state: dict, ctx: Context) -> list[dict]:
     lot_left = dict(lot_cap)
     left = total_bags
     alloc, used = [], set()
+    # SPREAD (ค่าเริ่ม 0.6): ผู้ซื้อรายเดียวได้ไม่เกิน ceil(SPREAD × งบรอบ) กระสอบ → แพ้รายเดียวไม่เสียทั้งรอบ
+    #   ด่าน 2 R2: ส่ง 5/5 กระสอบให้ชุมพรรายเดียว แล้วชุมพรลดราคาตัด 1.045 → 1.003 = ขาย 0 · ไม่มีคู่อื่นแล้วยอมเกิน (รอบเติม)
+    spread = pb_env("SPREAD", 0.6)   # ค่าเริ่ม 0.6 (19 พ.ย.) · 0 = ปิด
+    buyer_cap = max(1, math.ceil(spread * total_bags)) if spread > 0 else None
+    buyer_used = {}
+    # กระจายได้เฉพาะผู้ซื้อที่ราคาไม่ต่ำกว่าผู้ซื้อดีสุดของล็อตนั้นเกิน SPREAD_GAP (ค่าเริ่ม 0.02) · ต่ำกว่านั้น = ไม่คุ้ม รอรอบเติม
+    spread_gap = pb_env("SPREAD_GAP", 0.02)   # 19 พ.ย. จูนกลางคืน: 0.02 ผ่าน 2 รอบ (เดิม 0.03)
+    lot_top = {}
+    for c in cands:
+        lot_top[c["lot_id"]] = max(lot_top.get(c["lot_id"], 0.0), c["ratio"])
+    def spread_ok(c):
+        return buyer_cap is None or c["ratio"] >= lot_top[c["lot_id"]] - spread_gap
+    def buyer_room(c):
+        if buyer_cap is None:
+            return 10 ** 6
+        if not spread_ok(c):
+            return 0
+        return buyer_cap - buyer_used.get(c["rfq"].get("buyer", ""), 0)
+    def use_buyer(c, n):
+        b = c["rfq"].get("buyer", "")
+        buyer_used[b] = buyer_used.get(b, 0) + n
     weight = lambda c: c["score"] * (1 + 0.5 / max(c["n_types"], 1))   # ทางเลือกน้อย = ก่อน
+    # FRONT_LOW (ค่าเริ่ม 0 = ปิด): ล็อตที่ขายได้แค่ผู้ซื้อราคาต่ำ (เช่น Instant) ขายก่อน
+    #   ด่าน 2 ตลาดแข่ง: Instant ราคาตัดลด ×0.95 → ×0.87 ตลอดเกม · Commercial นิ่ง ×1.02–1.04 → ขายล็อตราคาตกก่อน
+    fl = pb_env("FRONT_LOW", 0.0)
+    if fl > 0 and ph != "final" and cands:
+        lot_best = {}
+        for c in cands:
+            lot_best[c["lot_id"]] = max(lot_best.get(c["lot_id"], 0.0), c["ratio"])
+        top_best = max(lot_best.values())
+        base_w = weight
+        weight = lambda c: base_w(c) * (1 + fl * (top_best - lot_best[c["lot_id"]]) / 0.10)
 
     # 6a. Specialty ก่อน (สไลด์ 18 หน้า 21–22: ผู้ซื้อที่จ่ายแพงได้ของดีก่อน) · RFQ Specialty ใบเล็ก (1–6 กระสอบ)
     #     → เสนอได้เต็มใบ และไม่ติดเพดานต่อล็อตของรอบ · ใบที่คะแนนดีก่อน (สุ่มถ่วง)
@@ -294,8 +325,10 @@ def plan(state: dict, ctx: Context) -> list[dict]:
         lot_room = avail[c["lot_id"]] - sum(a["bags"] for a in alloc if a["lot_id"] == c["lot_id"])
         rfq_room = c["rfq"]["bags"] - sum(a["bags"] for a in alloc if a["rfq"]["rfq_id"] == k[1])
         bags = min(lot_room, rfq_room, left, spec_cap - spec_added)
+        bags = min(bags, buyer_room(c))
         if k in used or bags <= 0:
             continue
+        use_buyer(c, bags)
         alloc.append({**c, "bags": bags})
         used.add(k)
         rfq_left[k[1]] = 0
@@ -313,11 +346,12 @@ def plan(state: dict, ctx: Context) -> list[dict]:
             k = (c["lot_id"], c["rfq"]["rfq_id"])
             if k in used:
                 continue
-            bags = min(rfq_left[c["rfq"]["rfq_id"]], lot_left[c["lot_id"]], left)
+            bags = min(rfq_left[c["rfq"]["rfq_id"]], lot_left[c["lot_id"]], left, buyer_room(c))
             if c["type"] == "SPECIALTY":
                 bags = min(bags, spec_cap - spec_added)
             if bags <= 0:
                 continue
+            use_buyer(c, bags)
             alloc.append({**c, "bags": bags})
             used.add(k)
             rfq_left[c["rfq"]["rfq_id"]] -= bags
@@ -339,11 +373,15 @@ def plan(state: dict, ctx: Context) -> list[dict]:
         # ล็อตอื่นก่อน แล้วค่อยให้ Specialty เติมส่วนที่เหลือ (capacity ไม่ว่าง)
         order = (_weighted_order([c for c in pool if c["type"] != "SPECIALTY"], weight, ctx.rng)
                  + _weighted_order([c for c in pool if c["type"] == "SPECIALTY"], weight, ctx.rng))
-        for c in order:
+        passes = ([order, [c for c in order if spread_ok(c)] + [c for c in order if not spread_ok(c)]]
+                  if buyer_cap is not None else [order])
+        for pi, c in ((pi, c) for pi, seq in enumerate(passes) for c in seq):
             if left <= 0:
                 break
             k = (c["lot_id"], c["rfq"]["rfq_id"])
             add = min(rfq_room[k[1]], lot_room[k[0]], left)
+            if pi == 0 and len(passes) > 1:
+                add = min(add, buyer_room(c))
             if add <= 0:
                 continue
             if k in idx:
@@ -351,6 +389,7 @@ def plan(state: dict, ctx: Context) -> list[dict]:
             else:
                 idx[k] = {**c, "bags": add}
                 alloc.append(idx[k])
+            use_buyer(c, add)
             rfq_room[k[1]] -= add
             lot_room[k[0]] -= add
             left -= add

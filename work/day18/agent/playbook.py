@@ -44,8 +44,14 @@ def calendar_weights(calendar: list, total: int) -> dict:
         if not nums:
             continue
         lo, hi = nums[0], nums[-1]
+        try:
+            w = float(row.get("demand_weight") or 1.0)
+        except (TypeError, ValueError):
+            w = 1.0
         for n in range(lo, hi + 1):
-            out[n] = {"w": float(row.get("demand_weight") or 1.0), "label": row.get("label", ""),
+            if n not in out:
+                continue
+            out[n] = {"w": w, "label": str(row.get("label") or ""),
                       "specialty_share": row.get("specialty_share")}
     return out
 

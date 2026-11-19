@@ -85,6 +85,28 @@ def send_offers(api: Market, offers: list[dict]) -> list[dict]:
     return sent
 
 
+def norm_info(info) -> dict:
+    """/v1/calendar ด่าน 3 อาจมีรูปแบบต่างจากด่าน 2 (ยังไม่ทราบ) → ไม่ให้ agent ล้มตอนเริ่ม
+    รับ list ของแถวปฏิทิน หรือ dict ที่มี calendar/items/rounds · ไม่มี rules.timeline.rounds → ROUNDS_FALLBACK (ค่าเริ่ม 15)"""
+    if isinstance(info, list):
+        info = {"calendar": info}
+    info = dict(info or {})
+    cal = info.get("calendar")
+    if not isinstance(cal, list):
+        cal = next((info[k] for k in ("items", "rounds", "schedule") if isinstance(info.get(k), list)), [])
+    info["calendar"] = [r for r in cal if isinstance(r, dict)]
+    rules = dict(info.get("rules") or {})
+    tl = dict(rules.get("timeline") or {})
+    try:
+        tl["rounds"] = int(tl.get("rounds"))
+    except (TypeError, ValueError):
+        tl["rounds"] = int(os.environ.get("ROUNDS_FALLBACK", "15"))
+        log("calendar_format_unknown", keys=sorted(info.keys()), rounds_fallback=tl["rounds"])
+    rules["timeline"] = tl
+    info["rules"] = rules
+    return info
+
+
 def make_ctx(rules, info, tv, rid, salt, memory, llm, state, learned, adjust=None, volume=1.0):
     # สุ่มด้วย seed ต่อรอบ (ลับ: salt สุ่มตอนเปิดโปรแกรม) → รอบเดียวกันคิดซ้ำได้ผลเหมือนเดิม แต่คนอื่นเดาไม่ได้
     rng = random.Random(f"{salt}-{rid}")
@@ -93,7 +115,7 @@ def make_ctx(rules, info, tv, rid, salt, memory, llm, state, learned, adjust=Non
 
 
 def play(api: Market, llm: LLM | None, forever: bool) -> None:
-    info = api.calendar()
+    info = norm_info(api.calendar())
     rules = info["rules"]
     total = rules["timeline"]["rounds"]
     memory, tv, acted, game = None, {}, set(), None
@@ -155,7 +177,7 @@ def play(api: Market, llm: LLM | None, forever: bool) -> None:
             continue
         if lots_key != game:                        # new game (or sandbox reset): start fresh
             if game is not None:
-                info = api.calendar()               # ตลาดฝึก: rules/calendar ของเกมใหม่อาจต่าง
+                info = norm_info(api.calendar())               # ตลาดฝึก: rules/calendar ของเกมใหม่อาจต่าง
                 rules = info["rules"]
                 total = rules["timeline"]["rounds"]
             game, acted, tv = lots_key, set(), estimate_lots(rules, state["lots"])
