@@ -62,6 +62,18 @@ def pass_prob(sample: dict, spec: dict, delta: dict | None = None) -> float:
     return round(p, 3)
 
 
+def near_pass_prob(sample: dict, spec: dict, delta: dict | None = None) -> float:
+    """เหมือน pass_prob แต่ไม่ตัดเป็น 0 เมื่อค่าตัวอย่างเกินขอบ (ใช้เลือกล็อตชิดขอบไปตรวจสเปกในรอบซ้อม)
+    screen ต่ำกว่าขั้นต่ำ 1 → 0.10 (ตัวอย่างคลาด ±1 ราว 19–21%) · ต่ำกว่า 2+ → 0"""
+    d = delta or globals()["delta"]()
+    p = _phi((spec["max_defect_pct"] - sample["defect_pct"]) / max(d["defect_pct"] / 2, 1e-6))
+    p *= _phi((spec["max_moisture_pct"] - sample["moisture_pct"]) / max(d["moisture_pct"] / 2, 1e-6))
+    if spec.get("min_screen") is not None:
+        gap = sample["screen"] - spec["min_screen"]
+        p *= 1.0 if gap >= d["screen"] else (SCREEN_EDGE_P if gap >= 0 else (0.10 if gap == -1 else 0.0))
+    return round(p, 3)
+
+
 def _shifted(sample: dict, dd: float, dm: float, ds: float) -> dict:
     return {"defect_pct": max(0.0, sample["defect_pct"] + dd), "moisture_pct": max(0.0, sample["moisture_pct"] + dm),
             "screen": int(round(sample["screen"] + ds))}
@@ -106,7 +118,7 @@ def spec_book(rfqs: list[dict]) -> dict:
     return book
 
 
-def classify(rules: dict, lots: list[dict], rfqs: list[dict], banned=None) -> dict:
+def classify(rules: dict, lots: list[dict], rfqs: list[dict], banned=None, verified=None) -> dict:
     """lot_id -> {cls, types (โอกาสผ่าน ≥ P_MIN), types_plain (ค่าตัวอย่างผ่าน), risk}
     banned = set{(lot, type)} หรือฟังก์ชัน (lot_id, type, spec) -> True ถ้าห้ามส่ง"""
     book = spec_book(rfqs)
@@ -120,8 +132,9 @@ def classify(rules: dict, lots: list[dict], rfqs: list[dict], banned=None) -> di
     for lot in lots:
         s = lot["sample"]
         risk = cliff_risk(rules, s)
-        plain = [t for t, sp in book.items() if spec_ok(s, sp) and not is_banned(lot["lot_id"], t, sp)]
-        probs = {t: pass_prob(s, book[t]) for t in plain}
+        ver = (lambda t, sp: bool(verified and verified(lot["lot_id"], sp)))   # ผลจริงยืนยันว่าผ่านสเปกนี้
+        plain = [t for t, sp in book.items() if (spec_ok(s, sp) or ver(t, sp)) and not is_banned(lot["lot_id"], t, sp)]
+        probs = {t: (1.0 if ver(t, book[t]) else pass_prob(s, book[t])) for t in plain}
         safe = [t for t in plain if probs[t] >= P_MIN]
         if not plain:
             cls = "UNSELLABLE"

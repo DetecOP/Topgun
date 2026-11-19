@@ -53,8 +53,9 @@ sys.path.insert(0, os.getcwd())
 import mock_market as mm
 seeds = json.loads(sys.argv[1])
 with contextlib.redirect_stdout(io.StringIO()):
-    res = mm.run(seeds, 0.3)[:-1]
+    res = mm.run(seeds, float(os.environ.get("MOCK_NOISE", "0.3")))[:-1]
 print(json.dumps([r["pr"] for r in res]))
+print(json.dumps([r.get("spec_mis", 0) for r in res]), file=sys.stderr)
 '''
 
 

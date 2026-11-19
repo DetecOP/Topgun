@@ -97,6 +97,7 @@ class MarketModel:
         self.fill = defaultdict(list)             # type -> [(round_idx, bought/wanted, offers per bag)]
         self.banned = set()                       # {(lot_id, buyer_type)} · ใช้เมื่อไม่รู้สเปก (log รุ่นเก่า)
         self.banned_specs = defaultdict(list)     # lot_id -> [spec ที่ตกด้วยคุณภาพจริง]
+        self.verified_specs = defaultdict(list)   # lot_id -> [spec ที่ผ่านด้วยคุณภาพจริง (ACCEPTED/PARTIAL/OUTBID รวมรอบซ้อม)]
         self.accepted_max = {}
         self.rounds_seen = 0
         self.offered_bags = 0                     # ทั้งเกม: กระสอบที่เสนอ / ที่ขายได้จริง → อัตราขายได้ (ใช้ตั้งงบ)
@@ -152,13 +153,19 @@ class MarketModel:
         return {"safe": round(safe, 4), "low": round(min(v[0] for v in per_round), 4),
                 "median": round(per_round[0][1], 4), "top": round(per_round[0][2], 4),
                 "fill2": round(max(v[3] for v in per_round[:2]), 3) if len(per_round) >= 2 else None,
-                "trend": round(trend, 4) if trend is not None else None, "fill": round(per_round[0][3], 3)}
+                "trend": round(trend, 4) if trend is not None else None, "fill": round(per_round[0][3], 3), "sd": round(sd, 4)}
 
     def market_ratio(self, buyer: str, spec: dict | None, tight: bool = True) -> float | None:
         mi = self.market_info(buyer, spec)
         if mi is None:
             return None
         return mi["safe"] if tight else mi["median"]
+
+    def spec_verified(self, lot_id: str, spec: dict) -> bool:
+        """เคยผ่านสเปกที่เข้มเท่ากันหรือเข้มกว่า spec (ผู้ซื้อตัดซองไม่ผ่านสเปกก่อนเรียงราคา → OUTBID = ผ่านสเปกแล้ว)"""
+        if os.environ.get("SPEC_PROBE", "1") == "0":
+            return False
+        return any(spec_stricter_or_equal(v, spec) for v in self.verified_specs.get(lot_id, []))
 
     def spec_banned(self, lot_id: str, btype: str, spec: dict) -> bool:
         if (lot_id, btype) in self.banned:
@@ -194,6 +201,10 @@ class MarketModel:
                     else:
                         self.banned.add((o["lot_id"], t))
                     continue
+                if st in ("ACCEPTED", "PARTIAL", "OUTBID") and s.get("spec"):
+                    self.verified_specs[o["lot_id"]].append(s["spec"])
+                if practice and s.get("probe") == "spec":
+                    continue                    # ซองตรวจสเปก (ราคาต่ำตั้งใจ) → ไม่ใช้เป็นข้อมูลราคา
                 if st in ("ACCEPTED", "PARTIAL", "OUTBID"):
                     self.ceil_buyer[buyer].at_least(r)
                     self.ceil_type[t].at_least(r)

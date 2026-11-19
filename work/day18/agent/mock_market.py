@@ -153,6 +153,7 @@ class FakeMarket:
         self.appraised, self.open, self.rfqs, self.last = None, [], [], None
         self.revenue, self.kg_sold = 0.0, 0
         self.kg_early = 0          # ขายได้ใน R1–R2 (วัดเป้า 'ขายออกตั้งแต่สองรอบแรก')
+        self.spec_mis_real = 0     # SPEC_MISMATCH ในรอบจริง (กระสอบ) · วัดว่าการตรวจสเปกทำให้ส่งผิดเพิ่มไหม
         # รอบซ้อม (ด่าน 3 มี P1–P2 · ไม่นับคะแนน ไม่เสียของ) · MOCK_PRACTICE = จำนวนรอบซ้อม (ค่าเริ่ม 2 ถ้าด่าน 3)
         self.n_practice = int(os.environ.get("MOCK_PRACTICE", "2" if stage3() else "0"))
         self.practice = 0          # รอบซ้อมที่กำลังเปิด (0 = รอบจริง)
@@ -270,6 +271,8 @@ class FakeMarket:
                 if not (q["defect_pct"] <= sp["max_defect_pct"] and q["moisture_pct"] <= sp["max_moisture_pct"]
                         and (sp["min_screen"] is None or q["screen"] >= sp["min_screen"])):
                     results.append({**o, "status": "SPEC_MISMATCH", "filled_kg": 0})
+                    if not self.practice:
+                        self.spec_mis_real += o["kg"] // 60
                     continue
                 book.append((o["price_per_kg"] / self.true[lid]["tv"] + r.uniform(0, 1e-6), o["kg"], o))
             book.sort(key=lambda x: x[0])
@@ -400,7 +403,7 @@ def run(seeds: list[int], noise: float) -> list[dict]:
         m = FakeMarket(s, noise)
         agent_main.play(m, None, forever=False)
         out.append({"seed": s, **m.score(), "sold_pct": round(m.kg_sold / sum(l["kg_total"] for l in m.lots) * 100),
-                    "early_bags": m.kg_early // 60})
+                    "early_bags": m.kg_early // 60, "spec_mis": m.spec_mis_real})
     out.append({"logs": str(logs)})
     return out
 

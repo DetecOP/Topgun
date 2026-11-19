@@ -19,7 +19,7 @@ from dataclasses import dataclass, field
 
 import flags
 import playbook as pb
-from inventory import P_MIN, classify, pass_prob, spec_ok
+from inventory import P_MIN, classify, near_pass_prob, pass_prob, spec_ok
 from market_model import PRIOR_TYPE, MarketModel
 
 BAG = 60
@@ -99,6 +99,86 @@ def is_practice(state: dict) -> bool:
     return rnd.get("kind") == "practice" or rnd.get("counts_for_score") is False
 
 
+def spec_probes(state: dict, ctx: Context, model: MarketModel, inv: dict, room: int) -> list[dict]:
+    """SPEC_PROBE (ค่าเริ่มเปิด · สเปกจาก Session B `work/day20/design/pr_plan.md` แนวคิด 1):
+    รอบซ้อมไม่เสียของ → ส่ง 1 กระสอบตรวจว่าล็อต "ชิดขอบ" (ค่าตัวอย่างเกินขอบเล็กน้อย) ผ่านสเปกผู้ซื้อที่จ่ายดีกว่าจริงไหม
+    ด่าน 2: ล็อต 3 ชื้น 12.6 (ขอบ Commercial 12.5) ขายได้แค่ Instant ×0.87–0.93 · ถ้าผ่าน Commercial (~×1.02) replay PR 0.966 → 1.009
+    ราคา SPEC_PROBE_PRICE (0.85) × TV ให้ "รับ" ถ้าผ่าน · ACCEPTED/PARTIAL/OUTBID = ผ่าน → ขายกลุ่มนั้นได้ · SPEC_MISMATCH = ห้าม"""
+    if os.environ.get("SPEC_PROBE", "1") == "0" or room <= 0:
+        return []
+    pmin, price_r = pb_env("SPEC_PROBE_MIN", 0.05), pb_env("SPEC_PROBE_PRICE", 0.85)
+    cands = []
+    for lot in state["lots"]:
+        lid = lot["lot_id"]
+        if lot["kg_available"] // BAG < 1:
+            continue
+        best = min([TYPE_RANK.get(t, 3) for t in inv[lid]["types"]] or [3])
+        for rfq in state["rfqs"]:
+            t, sp = rfq["buyer_type"], rfq["spec"]
+            if TYPE_RANK.get(t, 3) >= best:                       # ไม่จ่ายดีกว่ากลุ่มที่ขายได้อยู่แล้ว
+                continue
+            if (spec_ok(lot["sample"], sp) and pass_prob(lot["sample"], sp) >= P_MIN)                     or model.spec_banned(lid, t, sp) or model.spec_verified(lid, sp):
+                continue
+            q = near_pass_prob(lot["sample"], sp)
+            if q >= pmin:
+                cands.append((q * ctx.tv[lid], lid, t, rfq))
+    out, done = [], set()
+    for _, lid, t, rfq in sorted(cands, key=lambda x: -x[0]):
+        if len(out) >= room or (lid, t) in done:
+            continue
+        done.add((lid, t))
+        basis = ctx.tv[lid]
+        price = _avoid_round(price_r * basis)
+        out.append({"lot_id": lid, "rfq_id": rfq["rfq_id"], "bags": 1, "price": price, "basis": basis,
+                    "spec_override": True,
+                    "meta": {"type": t, "ratio": round(price / basis, 4), "rung": "spec-probe", "src": "spec-probe",
+                             "conf": 0.0, "cls": inv[lid]["cls"]}})
+        ctx.probe_tags = {**(getattr(ctx, "probe_tags", None) or {}), (rfq["rfq_id"], lid): "spec"}
+    if out:
+        ctx.notes.append(f"spec probe: {[(r['lot_id'], r['meta']['type']) for r in out]}")
+    return out
+
+
+def real_spec_probes(state: dict, ctx: Context, model: MarketModel, inv: dict, room: int, avail: dict,
+                     tight: bool, ph: str) -> list[dict]:
+    """ตรวจสเปกในรอบจริง (สเปก B · pr_plan.md หัวข้อ 9 ส่วน จ) · near_pass ≥ SPEC_PROBE_R_MIN (0.25)
+    ราคา = เป้าปกติของผู้ซื้อ (ขายจริงถ้าผ่าน) · ABOVE_LIMIT = ยังไม่สรุป → รอบถัดไปตรวจซ้ำได้ (เฉพาะ R1–R2)"""
+    if room <= 0:
+        return []
+    pmin = pb_env("SPEC_PROBE_R_MIN", 0.25)
+    cands = []
+    for lot in state["lots"]:
+        lid = lot["lot_id"]
+        if avail.get(lid, 0) < 1:
+            continue
+        best = min([TYPE_RANK.get(t, 3) for t in inv[lid]["types"]] or [3])
+        for rfq in state["rfqs"]:
+            t, sp = rfq["buyer_type"], rfq["spec"]
+            if TYPE_RANK.get(t, 3) >= best or rfq.get("bags", 1) < 1:
+                continue
+            if (spec_ok(lot["sample"], sp) and pass_prob(lot["sample"], sp) >= P_MIN)                     or model.spec_banned(lid, t, sp) or model.spec_verified(lid, sp):
+                continue
+            q = near_pass_prob(lot["sample"], sp)
+            if q >= pmin:
+                cands.append((q * ctx.tv[lid], lid, t, rfq))
+    out, done = [], set()
+    for _, lid, t, rfq in sorted(cands, key=lambda x: -x[0]):
+        if len(out) >= room or (lid, t) in done:
+            continue
+        done.add((lid, t))
+        tg = model.target(rfq.get("buyer", ""), t, rfq["spec"], tight=tight, phase=ph)
+        basis = ctx.tv[lid]
+        price = _avoid_round(max(tg["ratio"], pb_market_floor()) * basis)
+        out.append({"lot_id": lid, "rfq_id": rfq["rfq_id"], "bags": 1, "price": price, "basis": basis,
+                    "spec_override": True,
+                    "meta": {"type": t, "ratio": round(price / basis, 4), "rung": "spec-probe-real",
+                             "src": "spec-probe-real", "conf": tg["conf"], "cls": inv[lid]["cls"]}})
+        ctx.probe_tags = {**(getattr(ctx, "probe_tags", None) or {}), (rfq["rfq_id"], lid): "spec_real"}
+    if out:
+        ctx.notes.append(f"spec probe (real round): {[(r['lot_id'], r['meta']['type']) for r in out]}")
+    return out
+
+
 def practice_probe(state: dict, ctx: Context, model: MarketModel, inv: dict) -> list[dict]:
     """รอบซ้อม (ไม่นับคะแนน · ไม่เสียของ): เสนอ RFQ ละ 1 กระสอบ ไล่หลายราคา (−0.03 … +0.06 จากเป้า)
     ได้ข้อมูลเพดาน (ABOVE_LIMIT) และราคาที่ชนะได้ (ACCEPTED/OUTBID) ของตลาดจริงก่อนรอบ 1 ฟรี
@@ -107,7 +187,10 @@ def practice_probe(state: dict, ctx: Context, model: MarketModel, inv: dict) -> 
     lots = {l["lot_id"]: l for l in state["lots"]}
     used = {i: 0 for i in lots}
     rfqs = sorted(state["rfqs"], key=lambda r: (TYPE_RANK.get(r["buyer_type"], 3), ctx.rng.random()))
-    out, i = [], 0
+    out, i = spec_probes(state, ctx, model, inv, room), 0
+    for r in out:
+        used[r["lot_id"]] += 1
+    room -= len(out)
     for rfq in rfqs:
         if room <= 0:
             break
@@ -137,7 +220,7 @@ def plan(state: dict, ctx: Context) -> list[dict]:
     total = rules["timeline"]["rounds"]
     model = MarketModel(ctx.memory, ctx.learned)
     model.set_lots(state["lots"], ctx.tv)
-    inv = classify(rules, state["lots"], state["rfqs"], model.spec_banned)
+    inv = classify(rules, state["lots"], state["rfqs"], model.spec_banned, model.spec_verified)
     if is_practice(state) and os.environ.get("PRACTICE_PROBE", "1") != "0":
         rows = practice_probe(state, ctx, model, inv)
         ctx.basis = {r["lot_id"]: r["basis"] for r in rows}
@@ -211,6 +294,16 @@ def plan(state: dict, ctx: Context) -> list[dict]:
         total_bags = min(sellable, max(1, math.ceil(sellable * share * pace / sr))) if sellable else 0
     if state.get("capacity_left_kg") is not None:
         total_bags = min(total_bags, state["capacity_left_kg"] // BAG)
+    # SPEC_PROBE_REAL (ส่วน จ ของแนวคิด 1): R1–R2 ยังไม่มีผลตรวจจากรอบซ้อม (รอบซ้อมถูกตัด/ช่องไม่พอ) → ตรวจในรอบจริง
+    #   ≤ SPEC_PROBE_R_MAX ซอง · 1 กระสอบ · ราคาปกติของผู้ซื้อ (ขายจริงถ้าผ่าน) · หักจากงบรอบ
+    real_probes = []
+    if (ph == "early" and not is_practice(state) and total_bags > 0
+            and os.environ.get("SPEC_PROBE", "1") != "0" and os.environ.get("SPEC_PROBE_REAL", "1") != "0"):
+        real_probes = real_spec_probes(state, ctx, model, inv, min(int(pb_env("SPEC_PROBE_R_MAX", 2)), total_bags),
+                                       avail, tight, ph)
+        total_bags -= len(real_probes)
+        for r in real_probes:
+            avail[r["lot_id"]] -= 1
     lot_cap = {i: (a if (ph == "final" or at_risk) else min(a, max(1, math.ceil(a * share * pace * 1.5 / sr))))
                for i, a in avail.items()}
     if at_risk:
@@ -238,11 +331,12 @@ def plan(state: dict, ctx: Context) -> list[dict]:
         ctx.basis[lid] = basis
         for rfq in state["rfqs"]:
             t = rfq["buyer_type"]
-            if t not in ok_types or model.spec_banned(lid, t, rfq["spec"]) or not spec_ok(lot["sample"], rfq["spec"]):
+            verified = model.spec_verified(lid, rfq["spec"])     # รอบก่อน/รอบซ้อมยืนยันว่าคุณภาพจริงผ่าน
+            if t not in ok_types or model.spec_banned(lid, t, rfq["spec"]) or not (spec_ok(lot["sample"], rfq["spec"]) or verified):
                 continue
             if reserve_high and info["cls"] == "HIGH" and t != "SPECIALTY":
                 continue
-            pp = pass_prob(lot["sample"], rfq["spec"])       # โอกาสผ่านสเปก RFQ นี้ด้วยคุณภาพจริง
+            pp = 1.0 if verified else pass_prob(lot["sample"], rfq["spec"])   # โอกาสผ่านสเปก RFQ นี้ด้วยคุณภาพจริง
             if not allow_plain and pp < P_MIN:
                 continue
             key = (rfq.get("buyer", ""), t)
@@ -397,6 +491,47 @@ def plan(state: dict, ctx: Context) -> list[dict]:
         if added:
             ctx.notes.append(f"fill pass +{added} bags (budget {total_bags})")
 
+    # ---------- 6c. ซองที่สอง (UPSIDE · สเปก B pr_plan.md หัวข้อ 4/9 แนวคิด 3) ----------
+    # capacity เหลือเชิงโครงสร้าง (ด่าน 3: ~75 ช่อง/45 กระสอบ) → แบ่งบางกระสอบจากการจัดสรรหลักไปยื่นราคาค่ากลาง (~ชนะ 50%)
+    # คนละ RFQ ของผู้ซื้อกลุ่มเดียวกัน · แพ้ = ของกลับไปขายราคาชัวร์รอบหน้า · ไม่ใช้กับซองตรวจสเปก
+    if os.environ.get("UPSIDE", "0") != "0" and not is_practice(state) and n_now <= pb_env("UPSIDE_LAST", 12) and alloc:
+        last = int(pb_env("UPSIDE_LAST", 12))
+        rl12 = max(1, last - n_now + 1)
+        need = math.ceil(sellable / max(0.85, model.sell_rate() or 0.85))
+        slack = cap_b * rl12 - need - 2 * cap_b
+        total_alloc0 = sum(a["bags"] for a in alloc)
+        up_bags = max(0, min(slack // rl12, int(pb_env("UPSIDE_MAX_SHARE", 0.4) * total_alloc0)))
+        used_up = 0
+        for a in sorted(alloc, key=lambda a: -a["n_types"]):
+            if used_up >= up_bags:
+                break
+            t = a["type"]
+            if a["bags"] < 1 or (t == "INSTANT" and n_now > 5) or model.spec_verified(a["lot_id"], a["rfq"]["spec"])                     and not spec_ok(next(l for l in state["lots"] if l["lot_id"] == a["lot_id"])["sample"], a["rfq"]["spec"]):
+                continue
+            taken = {(x["lot_id"], x["rfq"]["rfq_id"]) for x in alloc}
+            alt = [r for r in state["rfqs"] if r["buyer_type"] == t and r["rfq_id"] != a["rfq"]["rfq_id"]
+                   and (a["lot_id"], r["rfq_id"]) not in taken
+                   and spec_ok(next(l for l in state["lots"] if l["lot_id"] == a["lot_id"])["sample"], r["spec"])]
+            for r in alt:
+                tg2 = model.target(r.get("buyer", ""), t, r["spec"], tight=tight, phase=ph)
+                mi2 = tg2.get("market_info")
+                if not mi2 or mi2.get("sd") is None or mi2["sd"] > pb_env("UPSIDE_MAX_SD", 0.02):
+                    continue
+                hi = min(mi2["median"] - 0.005, tg2["ceil"]["est"] - 0.01)
+                if hi <= a["ratio"] + 0.005:
+                    continue
+                k = min(up_bags - used_up, a["bags"], r["bags"])
+                if k < 1:
+                    continue
+                a["bags"] -= k
+                alloc.append({**a, "rfq": r, "bags": k, "ratio": hi, "tg": {**tg2, "ratio": hi}, "upside": True})
+                ctx.probe_tags = {**(getattr(ctx, "probe_tags", None) or {}), (r["rfq_id"], a["lot_id"]): "upside"}
+                used_up += k
+                break
+        alloc = [a for a in alloc if a["bags"] > 0]
+        if used_up:
+            ctx.notes.append(f"upside {used_up} bags (slack {slack} · cap {cap_b} x {rl12})")
+
     # ---------- 7. ladder ----------
     total_alloc = sum(a["bags"] for a in alloc)
     explore_bags = int(round(total_alloc * P["explore"] * PM["explore_mult"]))
@@ -427,9 +562,11 @@ def plan(state: dict, ctx: Context) -> list[dict]:
         r = max(r + _sell_shift(a["type"]), floor_of(a["type"], tg))   # SELL_SHIFT_<TYPE>: เน้นขายออก (ค่าลบ = ลดราคา)
         price = _avoid_round(r * a["basis"])
         out.append({"lot_id": a["lot_id"], "rfq_id": a["rfq"]["rfq_id"], "bags": a["bags"], "price": price,
+                    "spec_override": model.spec_verified(a["lot_id"], a["rfq"]["spec"]),
                     "basis": a["basis"], "meta": {"type": a["type"], "ratio": round(price / a["basis"], 4),
                                                   "rung": rung, "src": tg["source"], "conf": tg["conf"],
                                                   "cls": a["cls"]}})
+    out.extend(real_probes)
     ctx.meta = {"phase": ph, "share": round(share, 3), "pace": round(pace, 2), "budget_bags": total_bags, "tight": tight,
                 "code": flags.CODE_VERSION, "sell_rate": round(sr, 3), "at_risk": at_risk, "planned_bags": sum(a["bags"] for a in alloc), "sellable_bags": sellable, "pressure": pres, "pressure_mode": pmode, "cap_bags": cap_b,
                 "scenarios": {k: v["tags"] for k, v in sc.items()},
@@ -453,7 +590,8 @@ def guard(state: dict, ctx: Context, plan_rows: list[dict]) -> list[dict]:
     offers, seen = [], set()
     for p in plan_rows:
         lot, rfq = lots.get(p["lot_id"]), rfqs.get(p["rfq_id"])
-        if lot is None or rfq is None or (p["lot_id"], p["rfq_id"]) in seen or not spec_ok(lot["sample"], rfq["spec"]):
+        if lot is None or rfq is None or (p["lot_id"], p["rfq_id"]) in seen or (
+                not spec_ok(lot["sample"], rfq["spec"]) and not p.get("spec_override")):
             ctx.notes.append(f"guard dropped {p.get('lot_id')}->{p.get('rfq_id')}")
             continue
         kg = min(int(p["bags"]) * BAG, lot_left[lot["lot_id"]], rfq_left[rfq["rfq_id"]], room) // BAG * BAG

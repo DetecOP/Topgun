@@ -17,6 +17,7 @@ from datetime import datetime
 from pathlib import Path
 
 import advisor
+import rule_advisor
 import flags
 import playbook
 import strategy
@@ -229,6 +230,19 @@ def play(api: Market, llm: LLM | None, forever: bool) -> None:
             log("offers_sent", round=rid, source=source, n=len(sent), kg=sum(o["kg"] for o in sent),
                 seconds=round(time.time() - t0, 1), meta=getattr(ctx, "meta", {}), offers=offers, notes=ctx.notes)
             final = offers
+            # ตัวช่วยกฎ (ไม่ใช้ LLM · ไม่เปลี่ยนซอง): พิมพ์ป้าย + ค่าตั้งที่แนะนำให้คนเฝ้าจอ (RULE_ADVISOR=0 ปิด)
+            if os.environ.get("RULE_ADVISOR", "1") != "0" and not strategy.is_practice(state):
+                try:
+                    lab = rule_advisor.rule_labels(memory, state, total, (state.get("round") or {}).get("calendar", ""))
+                    print(rule_advisor.format_line(rid, lab), flush=True)
+                    if os.environ.get("RULE_AUTO", "0") == "1":     # ทดสอบในตลาดจำลองเท่านั้น
+                        ch = rule_advisor.auto_apply(lab, (state.get("round") or {}).get("number") or 1)
+                        if ch:
+                            log("rule_auto", round=rid, changes=ch)
+                    log("rule_advice", round=rid, labels={t: v["label"] for t, v in lab.items()},
+                        reasons={t: v["reason"] for t, v in lab.items()}, recs={t: v["rec"] for t, v in lab.items()})
+                except Exception as e:          # noqa: BLE001
+                    log("rule_advice_error", error=repr(e))
 
             # LLM: ถามหลังส่งชุดโมเดลแล้ว · ได้คำตอบที่ผ่านการบีบและต่างจากเดิม → ส่งแทนทั้งชุด (replace_existing)
             # รอบซ้อม (ไม่นับคะแนน): ไม่ถาม LLM · ใช้หยั่งราคาอย่างเดียว ประหยัดโควตา gateway
@@ -255,7 +269,7 @@ def play(api: Market, llm: LLM | None, forever: bool) -> None:
                     clamped_adjust=adv["adjust"], volume=adv["volume"], reason=adv["reason"], used=used,
                     prompt_chars=adv.get("prompt_chars"), dropped=adv.get("dropped"))
             # ratio ที่จำ = ราคา ÷ TV ที่ใช้ตั้งราคา (basis) → หน่วยเดียวกับที่ strategy คิด
-            memory.record_sent(rid, final, state, {**tv, **getattr(ctx, "basis", {})})
+            memory.record_sent(rid, final, state, {**tv, **getattr(ctx, "basis", {})}, getattr(ctx, "probe_tags", None))
             advance(state, ("ROUND_OPEN", game, rid))      # งานรอบนี้เสร็จ (รวม LLM) → ข้าม
 
         elif phase == "CLOSED" and game is not None and "closed" not in acted:

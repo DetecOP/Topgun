@@ -286,4 +286,102 @@ check(cw[7]["label"] == "เทศกาลกาแฟ" and cw[7]["w"] == 1.0 a
 ctx15 = strategy.Context(dict(mm.RULES), ni["calendar"], tv, random.Random(1), Mem({}, []), None, 200)
 check(isinstance(strategy.decide(mstate, ctx15)[0], list), "decide() ทำงานกับปฏิทินแปลก")
 
+print("16. ตรวจสเปกล็อตชิดขอบในรอบซ้อม (SPEC_PROBE)")
+edge = {"lot_id": "ED", "kg_total": 540, "kg_available": 540, "sample": {"defect_pct": 3.9, "moisture_pct": 12.6, "screen": 18}}
+inst = {"max_defect_pct": 15.0, "max_moisture_pct": 14.0, "min_screen": None}
+tv16 = {"ED": 122.0}
+ps = {"round": {"round_id": "P1", "kind": "practice", "number": 1, "of": 2, "counts_for_score": False, "calendar": "ปกติ"},
+      "lots": [edge], "capacity_left_kg": 300, "round_capacity_kg": 300, "my_open_offers": [], "seconds_left": 90,
+      "rfqs": [{"rfq_id": "P1-01", "buyer": "3 สยามคอมเมิร์ซ", "buyer_type": "COMMERCIAL", "kg": 600, "bags": 10, "spec": com},
+               {"rfq_id": "P1-02", "buyer": "5 อินสแตนท์ไทย", "buyer_type": "INSTANT", "kg": 600, "bags": 10, "spec": inst}]}
+ctx16 = strategy.Context(mm.RULES, mm.CALENDAR, tv16, random.Random(1), None, None, 90)
+off16, _ = strategy.decide(ps, ctx16)
+probe = [o for o in off16 if o["rfq_id"] == "P1-01"]
+check(len(probe) == 1 and probe[0]["kg"] == 60 and abs(probe[0]["price_per_kg"] / 122.0 - 0.85) < 0.01
+      and ctx16.probe_tags.get(("P1-01", "ED")) == "spec",
+      f"(i) รอบซ้อม: ชื้น 12.6 (ขอบ Commercial 12.5) → ส่ง 1 กระสอบตรวจสเปก ราคา ×0.85 {probe}")
+rs = dict(ps, round={"round_id": "R1", "kind": "real", "number": 1, "of": 15, "counts_for_score": True, "calendar": "ปกติ"},
+          rfqs=[dict(r, rfq_id=r["rfq_id"].replace("P1", "R1")) for r in ps["rfqs"]])
+sent16 = {"P1": [{"rfq_id": "P1-01", "lot_id": "ED", "buyer_type": "COMMERCIAL", "buyer": "3 สยามคอมเมิร์ซ", "markup": 0.85,
+                  "spec": com, "probe": "spec"}]}
+for st, want in (("OUTBID", True), ("SPEC_MISMATCH", False)):
+    rd = [{"round_id": "P1", "kind": "practice", "market_summary": [],
+           "my_offers": [{"rfq_id": "P1-01", "lot_id": "ED", "kg": 60, "filled_kg": 0, "status": st}]}]
+    mod = MarketModel(Mem(sent16, rd))
+    c16 = strategy.Context(mm.RULES, mm.CALENDAR, tv16, random.Random(2), Mem(sent16, rd), None, 90)
+    o16, _ = strategy.decide(rs, c16)
+    to_com = sum(o["kg"] for o in o16 if o["rfq_id"] == "R1-01")
+    if want:
+        check(mod.spec_verified("ED", com) and to_com > 0,
+              f"(ii) รอบซ้อมได้ OUTBID = ผ่านสเปกแล้ว → รอบจริงขาย Commercial ได้ ({to_com // 60} กระสอบ)")
+        check(mod.ceiling("3 สยามคอมเมิร์ซ", "COMMERCIAL")["lo"] is None, "ซองตรวจสเปก (ราคาต่ำตั้งใจ) ไม่ถูกใช้เป็นข้อมูลราคา")
+    else:
+        check(not mod.spec_verified("ED", com) and mod.spec_banned("ED", "COMMERCIAL", com) and to_com == 0,
+              "(iii) SPEC_MISMATCH → ห้ามส่ง Commercial ทั้งเกม")
+os.environ["SPEC_PROBE"] = "0"
+c0 = strategy.Context(mm.RULES, mm.CALENDAR, tv16, random.Random(1), None, None, 90)
+o0, _ = strategy.decide(ps, c0)
+os.environ.pop("SPEC_PROBE")
+check(not any(o["rfq_id"] == "P1-01" for o in o0), "(iv) SPEC_PROBE=0 → ไม่ตรวจ (พฤติกรรมเดิม)")
+
+print("17. ตรวจสเปกในรอบจริง R1–R2 เมื่อไม่มีผลรอบซ้อม (SPEC_PROBE_REAL)")
+c17 = strategy.Context(mm.RULES, mm.CALENDAR, tv16, random.Random(4), None, None, 90)
+o17, _ = strategy.decide(rs, c17)
+pr17 = [o for o in o17 if o["rfq_id"] == "R1-01"]
+check(1 <= len(pr17) <= 2 and all(o["kg"] == 60 for o in pr17) and pr17[0]["price_per_kg"] / 122.0 >= 0.95
+      and c17.probe_tags.get(("R1-01", "ED")) == "spec_real",
+      f"(i) ไม่มีรอบซ้อม → R1 ตรวจ Commercial 1 กระสอบ ราคาปกติ ×{pr17[0]['price_per_kg'] / 122.0:.3f}" if pr17 else "(i) ไม่พบซองตรวจ")
+rd_ok = [{"round_id": "P1", "kind": "practice", "market_summary": [],
+          "my_offers": [{"rfq_id": "P1-01", "lot_id": "ED", "kg": 60, "filled_kg": 0, "status": "OUTBID"}]}]
+c17b = strategy.Context(mm.RULES, mm.CALENDAR, tv16, random.Random(4), Mem(sent16, rd_ok), None, 90)
+strategy.decide(rs, c17b)
+check(not any(v == "spec_real" for v in (getattr(c17b, "probe_tags", None) or {}).values()),
+      "(ii) รอบซ้อมยืนยันแล้ว → R1 ไม่ตรวจซ้ำ (ขายปกติ)")
+far = dict(rs, lots=[dict(edge, sample={"defect_pct": 3.9, "moisture_pct": 12.8, "screen": 18})])
+c17c = strategy.Context(mm.RULES, mm.CALENDAR, tv16, random.Random(4), None, None, 90)
+o17c, _ = strategy.decide(far, c17c)
+check(not any(o["rfq_id"] == "R1-01" for o in o17c), "(iii) ชื้น 12.8 (โอกาสผ่าน < 0.25) → ไม่ตรวจในรอบจริง")
+r3 = dict(rs, round={"round_id": "R3", "kind": "real", "number": 3, "of": 15, "counts_for_score": True, "calendar": "ปกติ"},
+          rfqs=[dict(r, rfq_id=r["rfq_id"].replace("R1", "R3")) for r in rs["rfqs"]])
+c17d = strategy.Context(mm.RULES, mm.CALENDAR, tv16, random.Random(4), None, None, 90)
+o17d, _ = strategy.decide(r3, c17d)
+check(not any(o["rfq_id"] == "R3-01" for o in o17d), "(iv) R3 ขึ้นไป → ไม่ตรวจ")
+
+print("18. ตัวช่วยกฎ (rule_advisor · ไม่ใช้ LLM · ไม่เปลี่ยนซอง)")
+import rule_advisor  # noqa: E402
+lot18 = {"lot_id": "L", "kg_total": 600, "kg_available": 600, "sample": {"defect_pct": 4.0, "moisture_pct": 11.0, "screen": 15}}
+def st18(n, cap_kg=300, lots=None, rfqs=None):  # noqa: E302
+    return {"round": {"round_id": f"R{n}", "kind": "real", "number": n, "of": 15, "calendar": "ปกติ"},
+            "lots": lots or [lot18], "round_capacity_kg": cap_kg, "capacity_left_kg": cap_kg,
+            "rfqs": rfqs or [{"rfq_id": f"R{n}-01", "buyer": "3 สยามคอมเมิร์ซ", "buyer_type": "COMMERCIAL", "kg": 600,
+                              "bags": 10, "spec": com}]}
+def rnd18(rid, status, fill=1.0, t="COMMERCIAL"):  # noqa: E302
+    return {"round_id": rid, "kind": "real",
+            "my_offers": [{"rfq_id": f"{rid}-01", "lot_id": "L", "kg": 120, "filled_kg": 120 if status == "ACCEPTED" else 0,
+                           "status": status}],
+            "market_summary": [{"rfq_id": f"{rid}-01", "buyer": "x", "buyer_type": t, "wanted_kg": 600,
+                                "bought_kg": int(600 * fill), "offers": 5, "price_max": 120.0}]}
+sent18 = {f"R{k}": [{"rfq_id": f"R{k}-01", "lot_id": "L", "buyer_type": "COMMERCIAL"}] for k in range(1, 6)}
+lab = rule_advisor.rule_labels(Mem(sent18, [rnd18("R1", "OUTBID"), rnd18("R2", "OUTBID")]), st18(3), 15)
+check(lab["COMMERCIAL"]["label"] == "undercut" and "MKT_K_COMMERCIAL" in lab["COMMERCIAL"]["rec"], "แพ้ 2 รอบติด → undercut · MKT_K_COMMERCIAL=2.0")
+lab = rule_advisor.rule_labels(Mem(sent18, [rnd18("R1", "ACCEPTED", 0.4), rnd18("R2", "ACCEPTED", 0.3)]), st18(3), 15)
+check(lab["COMMERCIAL"]["label"] == "shortage" and "SHORT_CEIL" in lab["COMMERCIAL"]["rec"], "ผู้ซื้อได้ < 50% 2 รอบ + เราขายได้ → shortage")
+lab = rule_advisor.rule_labels(Mem(sent18, [rnd18("R1", "OUTBID", 0.4), rnd18("R2", "OUTBID", 0.3)]), st18(3), 15)
+check(lab["COMMERCIAL"]["label"] == "undercut", "ผู้ซื้อได้ < 50% แต่เราแพ้ราคา → ไม่ใช่ shortage (ห้ามขึ้นราคา)")
+lab = rule_advisor.rule_labels(Mem(sent18, [rnd18("R1", "ACCEPTED")]), st18(14, cap_kg=120), 15)
+check(lab["COMMERCIAL"]["label"] == "flood", "ของ 10 กระสอบ > capacity ที่เหลือ 2×2 → flood")
+fest_state = st18(6, rfqs=[{"rfq_id": "R6-01", "buyer": "1 ดอยช้างโรสเตอร์", "buyer_type": "SPECIALTY", "kg": 600, "bags": 10, "spec": doi}])
+spec_hist = [rnd18(f"R{k}", "ACCEPTED", 1.0, "SPECIALTY") for k in range(1, 6)]
+for r in spec_hist:
+    r["market_summary"][0]["wanted_kg"] = 240
+lab = rule_advisor.rule_labels(Mem(sent18, spec_hist), fest_state, 15, "เทศกาลกาแฟ")
+check(lab["SPECIALTY"]["label"] == "festival_surge", "เทศกาล: Specialty 10 กระสอบ ≥ 1.5 × ค่าเฉลี่ย R1–R5 (4) → festival_surge")
+lab = rule_advisor.rule_labels(Mem(sent18, [rnd18("R1", "ACCEPTED"), rnd18("R2", "ACCEPTED")]), st18(3), 15)
+check(all(v["label"] == "normal" and v["rec"] == "" for v in lab.values()), "ไม่มีสัญญาณ → normal ไม่แนะนำอะไร")
+ca, cb = (strategy.Context(mm.RULES, mm.CALENDAR, tv16, random.Random(9), None, None, 90) for _ in range(2))
+oa, _ = strategy.decide(rs, ca)
+rule_advisor.rule_labels(Mem({}, []), rs, 15)
+ob, _ = strategy.decide(rs, cb)
+check(oa == ob, "เรียกตัวช่วยกฎแล้ว ซองที่ส่งเหมือนเดิมทุกตัว")
+
 print(f"\nผ่านทั้งหมด {ok} ข้อ · log ทดสอบ: {agent_main.LOGS}")

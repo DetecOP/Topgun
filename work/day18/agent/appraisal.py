@@ -35,7 +35,9 @@ def true_value(rules: dict, sample: dict) -> float:
 
 
 _PRIOR = None
-HYBRID_MAX = 0.08     # hybrid: ใช้ค่า Bayes เมื่อห่างจากค่าตัวอย่างไม่เกิน 8% (ไม่กระโดดข้ามหน้าผาเกรด)
+HYBRID_MAX = 0.20     # hybrid: ใช้ค่า Bayes เมื่อห่างจากค่าตัวอย่างไม่เกิน 20% (เดิม 0.08) · ตั้งได้ด้วย APPR_HYBRID_MAX
+# 19 พ.ย. ทดสอบกับเกมตลาดฝึกที่ prior ไม่เคยเห็น 2 ชุด × 600 เกม: 0.2 − 0.08 = +0.19 ± 0.06 และ +0.21 ± 0.06 คะแนน/20
+#   (เกมได้ 0 ไม่เพิ่ม) · bayes ล้วน +0.19 ± 0.11 / +0.41 ± 0.13 แต่เกมได้ 0 เพิ่ม → เลือก 0.2 · เพดาน: รู้ defect+ชื้นจริง = 19.1
 
 
 def _prior():
@@ -95,7 +97,9 @@ def estimate_one(rules: dict, sample: dict, mode: str) -> float:
         b = bayes_tv(rules, sample)
     except Exception:          # ไฟล์ prior หาย/ข้อมูลแปลก → ใช้ค่าตัวอย่าง
         return tv0
-    if mode == "bayes" or abs(b - tv0) <= HYBRID_MAX * tv0:
+    import os
+    hmax = float(os.environ.get("APPR_HYBRID_MAX", HYBRID_MAX))
+    if mode == "bayes" or abs(b - tv0) <= hmax * tv0:
         return b
     return tv0
 

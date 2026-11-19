@@ -16,13 +16,15 @@ class Memory:
         self.path.write_text(json.dumps({"sent": self.sent, "rounds": self.rounds}, ensure_ascii=False, indent=1),
                              encoding="utf-8")
 
-    def record_sent(self, round_id: str, offers: list[dict], state: dict, tv: dict) -> None:
+    def record_sent(self, round_id: str, offers: list[dict], state: dict, tv: dict, tags: dict | None = None) -> None:
         types = {r["rfq_id"]: r["buyer_type"] for r in state["rfqs"]}
         buyers = {r["rfq_id"]: r.get("buyer", "") for r in state["rfqs"]}
         specs = {r["rfq_id"]: r.get("spec") for r in state["rfqs"]}
         self.sent[round_id] = [{**o, "buyer_type": types[o["rfq_id"]], "buyer": buyers[o["rfq_id"]],
                                 "spec": specs[o["rfq_id"]],
-                                "markup": round(o["price_per_kg"] / tv[o["lot_id"]], 3)} for o in offers]
+                                "markup": round(o["price_per_kg"] / tv[o["lot_id"]], 3),
+                                **({"probe": tags[(o["rfq_id"], o["lot_id"])]} if tags and (o["rfq_id"], o["lot_id"]) in tags else {})}
+                               for o in offers]
         self.save()
 
     def record_results(self, results: dict | None) -> None:
