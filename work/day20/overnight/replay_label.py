@@ -29,6 +29,7 @@ for i,rid in enumerate(order):
            "round_capacity_kg":o["round_capacity_kg"],"my_open_offers":[],"seconds_left":200}
     ctx=strategy.Context(rules, ng["calendar"], tv, random.Random(7), Mem({},hist), None, 200)
     _lab=json.loads(_os.environ.get("LABEL_ENV","{}")) if _os.environ.get("LABEL_ROUND")==rid else {}
+    if _os.environ.get("LABEL_MAP"): _lab=json.loads(_os.environ["LABEL_MAP"]).get(rid,{})
     _old={k:_os.environ.get(k) for k in _lab}; _os.environ.update(_lab)
     offers,_=strategy.decide(state, ctx)
     for k,v in _old.items():
