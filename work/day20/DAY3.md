@@ -139,11 +139,13 @@ $env:PYTHONIOENCODING="utf-8"; $env:AGENT_ENV=".env.competition"; $env:USE_LLM="
 3. `work/day20/agent/logs/` เตรียมแล้ว (มีแค่ learned.json) · ถ้ามี decisions.jsonl จากการลองรัน ให้ย้ายออกก่อน
 4. `python test_agent.py` (72/72) · อ่านตลาด GET (`ดูตลาด.ipynb`) · `llm_ping.py` 1 ครั้ง (ไม่ผ่าน → `LLM_LABEL=off`) · `python pack.py` (ไม่ --send)
 5. ไม่มี agent ค้าง · โน้ตบุ๊กเสียบสาย / Sleep = Never / แอป Claude เปิดค้าง · คนอธิบายกลยุทธ์ 1 คน
+5b. **ผู้ใช้ตรวจ `MARKET_URL` ใน `.env.competition` ว่าเป็นตลาดแข่งด่าน 3** · `pack.py --send` พิมพ์ URL แล้วส่งทันที ไม่หยุดถาม · ซ้อม `python pack.py` (ไม่ --send) → 29 ไฟล์ ≤ 20 MB ไม่มี .env.competition → ลบ handin.zip ที่ซ้อม
+5c. คนอธิบายกลยุทธ์อ่าน `design/handin_and_explain.md` หัวข้อ 4 (แบบ 1 นาที / 3 นาที / ถาม-ตอบ) · 09:30 ถามทีมงาน: อธิบายตอนไหน กี่นาที · เรียกส่งโค้ดทุกทีมไหม · **ยังไม่ทราบ**
 6. ถ้าผู้จัดตอบว่ารอบที่ไม่มีของขายนับ PR = 0 → แจ้ง A ปรับให้กระจายขายถึงรอบท้าย (ต้องตัดสินก่อน R1)
 
-**09:30–11:37**: รันคำสั่งหัวข้อ 4 · ตรวจบรรทัดแรก/appraisal_sent hybrid/offers_sent market3 · ส่ง new_game ให้ B · P1–P2 ดูซองตรวจสเปก + LLM · ทุกรอบ A ส่งผลให้ B → B แนะนำ ≤ 1 นาที → ผู้ใช้ "แก้เลย" → รีสตาร์ท · ค้าง = รีสตาร์ททันที · ห้ามส่ง/แก้ซองด้วยมือ
+**09:30–11:37**: รันคำสั่งหัวข้อ 4 · ตรวจบรรทัดแรก/appraisal_sent hybrid/offers_sent market3 · ส่ง new_game ให้ B · P1–P2 ดูซองตรวจสเปก + LLM · ทุกรอบ A รัน `python ../tools/round_digest.py` (สรุป ≤ 25 บรรทัด · `--trend` ทุกรอบ) ส่งให้ B · สคริปต์ล้ม = ส่ง round_results ดิบ ห้ามแก้สคริปต์กลางแข่ง → B แนะนำ ≤ 1 นาที → ผู้ใช้ "แก้เลย" → รีสตาร์ท · ค้าง = รีสตาร์ททันที · ห้ามส่ง/แก้ซองด้วยมือ
 
-**หลังปิด (≤ 10 นาที)**: `python pack.py --send` (ตรวจ URL) หรืออัปโหลด handin.zip · ห้ามลบ logs/decisions.jsonl · วิเคราะห์ log + รายงาน Day 3
+**หลังปิด (≤ 10 นาที · ขั้นตอนเต็ม `design/handin_and_explain.md` หัวข้อ 2)**: รอ `market_closed` → Ctrl+C → `python pack.py` → ทีมงานเรียก + ผู้ใช้สั่ง "ส่งเลย" → `python pack.py --send` (ต้องขึ้น "ส่งแล้ว") · สำรอง: อัปโหลด handin.zip ที่ `<MARKET_URL>/handin` หรือ USB · จดเวลาส่ง · ส่ง `round_digest.py --trend` ให้ B → B ส่งตัวเลขให้คนอธิบาย · ห้ามลบ logs/decisions.jsonl · วิเคราะห์ log + รายงาน Day 3
 
 ## 9. ความเสี่ยง
 

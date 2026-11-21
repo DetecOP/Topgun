@@ -1,0 +1,40 @@
+{
+  "_readme": "v2 ตามสไลด์วันที่ 17 · คัดลอกเป็น state.json ก่อนเริ่มเกม · ตัวเลขสูตรตรงกับชีต 'สูตร' ใน ใบประเมินมูลค่า.xlsx ของผู้จัด",
+  "settings": {
+    "p0": 120,
+    "moisture_ref": 12.5,
+    "moisture_penalty": 0.02,
+    "moisture_hard": 15,
+    "moisture_hard_factor": 0.6,
+    "salvage": 0.8,
+    "defect_steps": [[1, 1.08, "PREMIUM"], [3, 1.04, "GRADE_1"], [5, 1.0, "GRADE_2"], [7, 0.96, "GRADE_3"],
+                     [15, 0.85, "BELOW_STANDARD"], [100, 0.6, "REJECT"]],
+    "screen": {"12": 0.92, "13": 0.97, "14": 1.0, "15": 1.0, "16": 1.03, "17": 1.03, "18": 1.06},
+    "buyer_specs": {
+      "COMMERCIAL": {"max_defect": 7, "max_moisture": 12.5, "min_screen": null},
+      "INSTANT": {"max_defect": 15, "max_moisture": 14, "min_screen": null}
+    },
+    "_note_markup": "ค่าเริ่มต้น (ราคา÷TV) ก่อนมีข้อมูล · ประมาณจากผลตัวอย่างในสไลด์ 16/20/23: Instant ×0.968 ได้บ้างไม่ได้บ้าง, Commercial ×1.058 ไม่เกินเพดานแต่แพ้บอต, ×1.25 เกินเพดาน · ปรับตามผลทุกรอบ",
+    "start_markup": {"COMMERCIAL": 1.04, "INSTANT": 0.95, "SPECIALTY": 1.10},
+    "step_up": 0.03,
+    "step_down": 0.04,
+    "outbid_step": 0.02,
+    "min_markup": 0.85,
+    "max_markup": 1.30,
+    "pace": 2.5,
+    "explore_step": 0.04,
+    "rounds_total": 6,
+    "rounds_csv": "C:\\Users\\guttj\\Documents\\TGR2026\\rounds.csv"
+  },
+  "round": 1,
+  "lots": [],
+  "_lots_example": [
+    {"id": "LOT-T05-1", "moisture": 13.23, "defect": 1.79, "screen": 14, "bags_total": 3, "bags_left": 3}
+  ],
+  "rfqs": [],
+  "_rfqs_example": [
+    {"id": "R1-01", "buyer": "6 ทรีอินวันฟู้ดส์", "type": "INSTANT", "bags": 15, "max_defect": 15, "max_moisture": 14, "min_screen": null}
+  ],
+  "history": [],
+  "pending": null
+}

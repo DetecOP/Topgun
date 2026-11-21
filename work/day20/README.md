@@ -11,6 +11,7 @@
 | `data/stage2_competition/` | log ตลาดแข่งด่าน 2 จริง (ใช้ replay) | ทดสอบ |
 | `data/sandbox_rules.json` | กติกาตลาดฝึก (ใช้คิด TV) | ทดสอบประเมินมูลค่า |
 | `data/sandbox_*` | log ตลาดฝึก (ใหญ่ · ไม่ commit) | ทดสอบประเมินมูลค่า |
+| `tools/round_digest.py` | **วันแข่ง:** สรุปผลรอบจาก log ให้ B (อ่านอย่างเดียว) · `--round R5` · `--trend` | ทุกรอบ |
 | `tools/` | สคริปต์ทดสอบ: `replay*.py` (ข้อมูลด่าน 2) · `ab.py` / `tune.py` (ตลาดจำลอง) · `build_prior.py` / `appraisal_eval.py` (ประเมินมูลค่า) · `check.py` `pooled.py` `unsold_breakdown.py` ฯลฯ | ทดสอบก่อนแข่ง |
 | `llm_eval/` | ทดสอบ LLM ผู้จัด: prompt v1–v3 · ผล · ชุดแนวโน้มราคา · K0 | อ้างอิง |
 | `results/` | ผลทดสอบ: `NIGHT_LOG.md` (บันทึกกลางคืน + บทเรียน) · `RESULTS_1500.md` · ผล A/B · ไฟล์สำรอง (`backups/` ไม่ commit) | อ้างอิง |
